@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { Button, type ButtonProps } from '@/components/ui/Button'
 
@@ -11,6 +12,7 @@ interface AnimatedFeatureSpotlightProps extends React.HTMLAttributes<HTMLElement
   description: string
   buttonText: string
   buttonProps?: ButtonProps
+  buttonHref?: string
   imageUrl: string
   imageAlt?: string
 }
@@ -25,12 +27,26 @@ const AnimatedFeatureSpotlight = React.forwardRef<HTMLElement, AnimatedFeatureSp
       description,
       buttonText,
       buttonProps,
+      buttonHref,
       imageUrl,
       imageAlt = 'Feature illustration',
       ...props
     },
     ref
   ) => {
+    const buttonElement = (
+      <Button size="lg" {...buttonProps}>
+        {buttonText}
+      </Button>
+    )
+
+    const buttonContent = buttonHref ? (
+      <Link href={buttonHref}>
+        {buttonElement}
+      </Link>
+    ) : (
+      buttonElement
+    )
     return (
       <>
         <style>{`
@@ -68,9 +84,7 @@ const AnimatedFeatureSpotlight = React.forwardRef<HTMLElement, AnimatedFeatureSp
                 {description}
               </p>
               <div className="animate-in fade-in slide-in-from-top-4 duration-700 delay-400">
-                <Button size="lg" {...buttonProps}>
-                  {buttonText}
-                </Button>
+                {buttonContent}
               </div>
             </div>
 

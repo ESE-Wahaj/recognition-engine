@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { GlowCard } from '@/components/ui/spotlight-card'
 import { AnimatedFeatureSpotlight } from '@/components/ui/feature-spotlight'
@@ -60,6 +61,7 @@ export default function AboutPage() {
           }
           description="Share wins publicly to celebrate and motivate. Keep challenges private to coach with care. This balance builds trust, drives performance, and creates a culture where everyone feels seen."
           buttonText="Learn More →"
+          buttonHref="/features"
           buttonProps={{
             variant: 'primary',
             size: 'lg',
