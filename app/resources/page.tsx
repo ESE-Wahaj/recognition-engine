@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { ChecklistGrid } from '@/components/ChecklistGrid'
+import { GlowCard } from '@/components/ui/spotlight-card'
 import { readLinks } from '@/lib/links'
 
 export const metadata: Metadata = {
@@ -121,12 +122,12 @@ export default async function ResourcesPage() {
         <SectionHeader label="Access Your Resources" />
         <div className="flex flex-col gap-4">
           {resources.map((r) => (
-            <div
+            <GlowCard
               key={r.key}
-              style={{ background: 'linear-gradient(135deg, #0D0D14 0%, #1A1A2E 100%)' }}
-              className="rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center gap-5 border border-white/10"
+              glowColor={r.color === 'gold' ? 'gold' : r.color === 'teal' ? 'green' : 'rose'}
+              className="p-6 flex flex-col sm:flex-row sm:items-center gap-5"
             >
-              <div className="flex items-center gap-4 flex-1">
+              <div className="flex items-center gap-4 flex-1 relative z-10">
                 <div
                   className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 ${
                     r.color === 'gold'
@@ -139,18 +140,18 @@ export default async function ResourcesPage() {
                   {r.icon}
                 </div>
                 <div>
-                  <p className="font-mono text-[10px] tracking-[0.1em] text-white/40 mb-0.5">{r.label}</p>
-                  <h3 className="font-display text-xl font-bold text-white mb-1">{r.title}</h3>
-                  <p className="text-sm text-white/50 leading-relaxed">{r.description}</p>
+                  <p className="font-mono text-[10px] tracking-[0.1em] text-gray-500 mb-0.5">{r.label}</p>
+                  <h3 className="font-display text-xl font-bold text-ink mb-1">{r.title}</h3>
+                  <p className="text-sm text-mist leading-relaxed">{r.description}</p>
                 </div>
               </div>
               <a
                 href={r.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap flex-shrink-0 transition-all hover:opacity-90 active:scale-[.98] ${
+                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap flex-shrink-0 transition-all hover:opacity-90 active:scale-[.98] relative z-10 ${
                   r.color === 'gold'
-                    ? 'bg-gold-grad text-ink'
+                    ? 'bg-gold text-ink'
                     : r.color === 'teal'
                     ? 'bg-teal text-white'
                     : 'bg-rose text-white'
@@ -158,7 +159,7 @@ export default async function ResourcesPage() {
               >
                 {r.buttonLabel}
               </a>
-            </div>
+            </GlowCard>
           ))}
         </div>
       </section>
