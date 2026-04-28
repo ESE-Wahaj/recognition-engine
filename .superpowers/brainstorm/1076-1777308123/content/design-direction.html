@@ -1,0 +1,137 @@
+<h2>Design Direction — Pick One</h2>
+<p class="subtitle">How should the hero-odyssey dark theme extend across the full Recognition Engine site?</p>
+
+<div class="cards">
+
+  <!-- Option A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#000;padding:16px;border-radius:8px;min-height:220px;position:relative;overflow:hidden;">
+      <!-- Glow -->
+      <div style="position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);width:260px;height:120px;background:radial-gradient(ellipse,rgba(80,120,255,0.25) 0%,transparent 70%);pointer-events:none;"></div>
+      <!-- Navbar -->
+      <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:50px;padding:6px 14px;margin-bottom:20px;">
+        <span style="color:#fff;font-size:11px;font-weight:700;">The Recognition Engine</span>
+        <div style="display:flex;gap:8px;">
+          <span style="color:rgba(255,255,255,0.5);font-size:9px;">Home</span>
+          <span style="color:rgba(255,255,255,0.5);font-size:9px;">Features</span>
+          <span style="color:rgba(255,255,255,0.5);font-size:9px;">Resources</span>
+        </div>
+      </div>
+      <!-- Hero text -->
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="color:rgba(255,255,255,0.4);font-size:8px;letter-spacing:3px;margin-bottom:6px;">✦ PRODUCT HUB</div>
+        <div style="color:#fff;font-size:18px;font-weight:300;line-height:1.2;">The <span style="background:linear-gradient(135deg,#C9952A,#E8B84B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Recognition Engine</span></div>
+        <div style="color:rgba(255,255,255,0.4);font-size:9px;margin-top:4px;">CX Team Performance & Recognition</div>
+      </div>
+      <!-- Cards section stays dark -->
+      <div style="display:flex;gap:6px;">
+        <div style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px;border-left:3px solid #C9952A;">
+          <div style="color:#C9952A;font-size:8px;margin-bottom:3px;">📊</div>
+          <div style="color:#fff;font-size:8px;font-weight:600;">Dashboard</div>
+          <div style="color:rgba(255,255,255,0.4);font-size:7px;">Google Sheets</div>
+        </div>
+        <div style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px;border-left:3px solid #1A6B6B;">
+          <div style="color:#1A6B6B;font-size:8px;margin-bottom:3px;">🎨</div>
+          <div style="color:#fff;font-size:8px;font-weight:600;">Templates</div>
+          <div style="color:rgba(255,255,255,0.4);font-size:7px;">Canva Kit</div>
+        </div>
+        <div style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px;border-left:3px solid #B84040;">
+          <div style="color:#B84040;font-size:8px;margin-bottom:3px;">📖</div>
+          <div style="color:#fff;font-size:8px;font-weight:600;">PDF Guide</div>
+          <div style="color:rgba(255,255,255,0.4);font-size:7px;">6 pages</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Full Dark Immersion</h3>
+      <p>Black background everywhere. All pages, all cards, all sections go dark. Gold/teal/rose accents survive as glowing left-borders and icon colours. Frosted-glass cards with subtle white borders throughout. Matches the hero-odyssey component exactly.</p>
+    </div>
+  </div>
+
+  <!-- Option B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#000;padding:16px;border-radius:8px;min-height:220px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);width:260px;height:120px;background:radial-gradient(ellipse,rgba(80,120,255,0.25) 0%,transparent 70%);pointer-events:none;"></div>
+      <!-- Navbar -->
+      <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:50px;padding:6px 14px;margin-bottom:20px;">
+        <span style="color:#fff;font-size:11px;font-weight:700;">The Recognition Engine</span>
+        <div style="display:flex;gap:8px;">
+          <span style="color:rgba(255,255,255,0.5);font-size:9px;">Home</span>
+          <span style="color:rgba(255,255,255,0.5);font-size:9px;">Features</span>
+          <span style="color:rgba(255,255,255,0.5);font-size:9px;">Resources</span>
+        </div>
+      </div>
+      <!-- Hero full dark -->
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="color:#fff;font-size:18px;font-weight:300;">The <span style="background:linear-gradient(135deg,#C9952A,#E8B84B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Recognition Engine</span></div>
+      </div>
+      <!-- Inner section switches to light -->
+      <div style="background:#F7F7FA;border-radius:8px;padding:10px;">
+        <div style="font-size:8px;color:#6B6B82;text-align:center;margin-bottom:8px;letter-spacing:2px;">YOUR DELIVERABLES</div>
+        <div style="display:flex;gap:6px;">
+          <div style="flex:1;background:#fff;border:1px solid #E2E2EB;border-radius:6px;padding:6px;border-left:3px solid #C9952A;">
+            <div style="color:#0D0D14;font-size:7px;font-weight:700;">Dashboard</div>
+            <div style="color:#6B6B82;font-size:6px;">Google Sheets</div>
+          </div>
+          <div style="flex:1;background:#fff;border:1px solid #E2E2EB;border-radius:6px;padding:6px;border-left:3px solid #1A6B6B;">
+            <div style="color:#0D0D14;font-size:7px;font-weight:700;">Templates</div>
+            <div style="color:#6B6B82;font-size:6px;">Canva Kit</div>
+          </div>
+          <div style="flex:1;background:#fff;border:1px solid #E2E2EB;border-radius:6px;padding:6px;border-left:3px solid #B84040;">
+            <div style="color:#0D0D14;font-size:7px;font-weight:700;">PDF Guide</div>
+            <div style="color:#6B6B82;font-size:6px;">6 pages</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Dark Hero, Light Interior</h3>
+      <p>Home page hero is full dark with lightning. Inner content sections (cards, features, checklist) switch to the existing light surface theme. Striking entrance, comfortable reading throughout. The original gold/teal/rose design system stays intact for content areas.</p>
+    </div>
+  </div>
+
+  <!-- Option C -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#000;padding:16px;border-radius:8px;min-height:220px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:260px;height:120px;background:radial-gradient(ellipse,rgba(201,149,42,0.2) 0%,transparent 60%);pointer-events:none;"></div>
+      <!-- Navbar - pill style -->
+      <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:50px;padding:6px 14px;margin-bottom:20px;">
+        <span style="color:#fff;font-size:11px;font-weight:700;">The <span style="background:linear-gradient(135deg,#C9952A,#E8B84B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Recognition Engine</span></span>
+        <div style="display:flex;gap:8px;">
+          <span style="color:rgba(255,255,255,0.5);font-size:9px;">Home</span>
+          <span style="color:rgba(255,255,255,0.5);font-size:9px;">Features</span>
+          <span style="background:linear-gradient(135deg,#C9952A,#E8B84B);color:#000;font-size:8px;padding:2px 8px;border-radius:20px;font-weight:700;">Resources</span>
+        </div>
+      </div>
+      <!-- Hero dark with gold glow -->
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="color:rgba(201,149,42,0.7);font-size:7px;letter-spacing:3px;margin-bottom:5px;">✦ PRODUCT HUB — EXCLUSIVE ACCESS</div>
+        <div style="color:#fff;font-size:17px;font-weight:300;">The <span style="background:linear-gradient(135deg,#C9952A,#E8B84B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Recognition Engine</span></div>
+      </div>
+      <!-- Section stays dark but with more gold -->
+      <div style="background:rgba(201,149,42,0.08);border:1px solid rgba(201,149,42,0.2);border-radius:8px;padding:10px;">
+        <div style="display:flex;gap:6px;">
+          <div style="flex:1;background:rgba(201,149,42,0.1);border:1px solid rgba(201,149,42,0.25);border-radius:6px;padding:6px;">
+            <div style="color:#E8B84B;font-size:8px;margin-bottom:2px;">📊</div>
+            <div style="color:#fff;font-size:7px;font-weight:600;">Dashboard</div>
+          </div>
+          <div style="flex:1;background:rgba(26,107,107,0.15);border:1px solid rgba(26,107,107,0.3);border-radius:6px;padding:6px;">
+            <div style="color:#4ECDC4;font-size:8px;margin-bottom:2px;">🎨</div>
+            <div style="color:#fff;font-size:7px;font-weight:600;">Templates</div>
+          </div>
+          <div style="flex:1;background:rgba(184,64,64,0.15);border:1px solid rgba(184,64,64,0.3);border-radius:6px;padding:6px;">
+            <div style="color:#FF6B6B;font-size:8px;margin-bottom:2px;">📖</div>
+            <div style="color:#fff;font-size:7px;font-weight:600;">Guide</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Dark + Vivid Accents</h3>
+      <p>Full dark everywhere, but with gold/teal/rose dialled up as vivid glows and tinted card backgrounds — not just left-borders. Gold becomes the dominant accent colour. Active nav items get a gold pill. Cards have coloured tint washes. More vibrant than Option A.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:16px;">Click a card to select, or just tell me in the terminal which direction you prefer and why.</p>

@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recognition Engine — Cyber Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:           #0A1122;
+  --bg-2:         #141E35;
+  --cyan:         #00D4FF;
+  --cyan-dim:     rgba(0,212,255,0.15);
+  --cyan-glow:    rgba(0,212,255,0.2);
+  --silver:       #B0C4DE;
+  --silver-dim:   rgba(176,196,222,0.15);
+  --text-1:       #F8FAFC;
+  --text-2:       #94A3B8;
+  --text-3:       rgba(148,163,184,0.5);
+  --glass-bg:     rgba(255,255,255,0.03);
+  --glass-border: rgba(176,196,222,0.15);
+  --glass-shadow: 0 8px 32px 0 rgba(0,0,0,0.5);
+  --glow-shadow:  0 0 15px rgba(0,212,255,0.2);
+  --r:            14px;
+  --r-sm:         8px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-1);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── LAYOUT ───────────────────────────────────── */
+.page { max-width: 1160px; margin: 0 auto; padding: 28px; }
+
+.annotation {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--cyan-dim);
+  border: 1px solid rgba(0,212,255,0.3);
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--cyan);
+  letter-spacing: 0.08em;
+  margin-bottom: 28px;
+}
+
+.divider {
+  display: flex; align-items: center; gap: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--text-3);
+  text-transform: uppercase;
+  margin: 48px 0 24px;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+}
+
+/* ── NAVBAR ───────────────────────────────────── */
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px;
+  background: rgba(10,17,34,0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  margin-bottom: 32px;
+  box-shadow: var(--glass-shadow);
+}
+
+.nav-left { display: flex; align-items: center; gap: 12px; }
+.nav-logo-img { width: 36px; height: 36px; object-fit: contain; }
+.nav-wordmark { font-size: 14px; font-weight: 700; color: var(--text-1); letter-spacing: -0.01em; }
+.nav-wordmark em { font-style: normal; color: var(--cyan); }
+
+.nav-links { display: flex; gap: 2px; }
+.nav-link {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.nav-link:hover, .nav-link.active { color: var(--text-1); background: rgba(255,255,255,0.05); }
+.nav-link.active { color: var(--cyan); }
+
+.nav-cta {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 18px;
+  background: var(--cyan-dim);
+  border: 1px solid rgba(0,212,255,0.45);
+  border-radius: 9px;
+  font-size: 13px; font-weight: 600;
+  color: var(--cyan);
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 0 12px rgba(0,212,255,0.1);
+}
+.nav-cta:hover { background: rgba(0,212,255,0.2); box-shadow: 0 0 20px rgba(0,212,255,0.25); }
+
+/* ── HERO ─────────────────────────────────────── */
+.hero {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 80px 40px 88px;
+  text-align: center;
+  background: var(--bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Constellation background */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,212,255,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(20,30,53,0.8) 0%, transparent 50%),
+    radial-gradient(ellipse 30% 40% at 80% 70%, rgba(0,212,255,0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Dot grid pattern */
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(176,196,222,0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+.hero-content { position: relative; z-index: 2; max-width: 640px; margin: 0 auto; }
+
+.hero-logo {
+  width: 80px; height: 80px;
+  object-fit: contain;
+  margin: 0 auto 24px;
+  filter: drop-shadow(0 0 16px rgba(0,212,255,0.4));
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--cyan-dim);
+  border: 1px solid rgba(0,212,255,0.25);
+  color: var(--cyan);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 28px;
+}
+
+.hero-h1 {
+  font-size: 58px; font-weight: 800;
+  line-height: 1.05; letter-spacing: -0.03em;
+  color: var(--text-1);
+  margin-bottom: 16px;
+}
+.hero-h1 em { font-style: normal; color: var(--cyan); }
+
+.hero-sub {
+  font-size: 17px; font-weight: 300;
+  color: var(--text-2);
+  max-width: 440px;
+  margin: 0 auto 40px;
+  letter-spacing: 0.01em;
+}
+
+.hero-divider {
+  width: 40px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  margin: 0 auto 36px;
+  box-shadow: 0 0 8px var(--cyan);
+}
+
+.hero-panel {
+  max-width: 520px; margin: 0 auto 40px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-top-color: rgba(176,196,222,0.25);
+  border-left-color: rgba(176,196,222,0.22);
+  border-radius: 12px;
+  padding: 20px 24px;
+  text-align: left;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--glass-shadow);
+}
+.hero-panel-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 0.14em;
+  color: var(--cyan);
+  margin-bottom: 8px;
+}
+.hero-panel p { font-size: 14px; color: var(--text-2); line-height: 1.75; }
+.hero-panel strong { color: var(--text-1); font-weight: 500; }
+
+.hero-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 26px;
+  background: var(--cyan);
+  color: var(--bg);
+  font-size: 14px; font-weight: 700;
+  border-radius: 10px; border: none;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(0,212,255,0.35);
+  letter-spacing: 0.01em;
+}
+.btn-glass {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 26px;
+  background: var(--glass-bg);
+  color: var(--text-1);
+  font-size: 14px; font-weight: 500;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+/* ── QUICKSTART ───────────────────────────────── */
+.quickstart {
+  background: var(--bg-2);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 14px 24px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; flex-wrap: wrap;
+  margin-top: 2px;
+}
+.qs-label {
+  font-size: 13px; font-weight: 600;
+  color: var(--cyan);
+  display: flex; align-items: center; gap: 7px;
+}
+.qs-steps { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.qs-step {
+  background: rgba(0,212,255,0.07);
+  border: 1px solid rgba(0,212,255,0.18);
+  border-radius: 6px;
+  padding: 4px 11px;
+  font-size: 12px; font-weight: 500;
+  color: var(--text-2);
+}
+.qs-arrow { color: var(--text-3); font-size: 10px; font-weight: 700; }
+
+/* ── CARDS ────────────────────────────────────── */
+.card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-top-color: rgba(176,196,222,0.22);
+  border-left-color: rgba(176,196,222,0.2);
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  margin-bottom: 10px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+  border-color: rgba(176,196,222,0.28);
+  box-shadow: var(--glass-shadow), var(--glow-shadow);
+}
+
+.card-header {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.card-icon {
+  width: 46px; height: 46px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid;
+}
+.card-icon.cyan { background: rgba(0,212,255,0.08); border-color: rgba(0,212,255,0.2); }
+.card-icon.teal { background: rgba(0,180,180,0.08); border-color: rgba(0,180,180,0.2); }
+.card-icon.silver { background: rgba(176,196,222,0.08); border-color: rgba(176,196,222,0.2); }
+
+.card-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 0.12em;
+  color: var(--text-3); margin-bottom: 2px;
+}
+.card-title {
+  font-size: 18px; font-weight: 700;
+  color: var(--text-1); line-height: 1.2;
+}
+.card-desc { font-size: 13px; color: var(--text-2); margin-top: 2px; }
+.card-meta { flex: 1; }
+
+.card-cta {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  border: 1px solid;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+}
+.card-cta.cyan {
+  background: rgba(0,212,255,0.1);
+  border-color: rgba(0,212,255,0.35);
+  color: var(--cyan);
+}
+.card-cta.teal {
+  background: rgba(0,180,180,0.1);
+  border-color: rgba(0,180,180,0.35);
+  color: #00D4CC;
+}
+.card-cta.silver {
+  background: rgba(176,196,222,0.07);
+  border-color: rgba(176,196,222,0.25);
+  color: var(--silver);
+}
+
+.card-body { padding: 20px 24px; }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.feature {
+  display: flex; align-items: flex-start; gap: 9px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(176,196,222,0.08);
+  border-radius: 7px;
+}
+.feature-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%; margin-top: 7px; flex-shrink: 0;
+}
+.feature-dot.cyan { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+.feature-dot.teal { background: #00D4CC; box-shadow: 0 0 6px #00D4CC; }
+.feature-dot.silver { background: var(--silver); }
+.feature span { font-size: 12px; color: var(--text-2); line-height: 1.45; }
+
+/* ── STATS ────────────────────────────────────── */
+.stats {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-top-color: rgba(176,196,222,0.22);
+  border-radius: var(--r);
+  padding: 40px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  box-shadow: var(--glass-shadow);
+}
+.stat {
+  text-align: center;
+  padding: 0 20px;
+  border-right: 1px solid var(--glass-border);
+}
+.stat:last-child { border-right: none; }
+.stat-value {
+  font-size: 42px; font-weight: 800;
+  color: var(--cyan);
+  line-height: 1;
+  margin-bottom: 6px;
+  text-shadow: 0 0 20px rgba(0,212,255,0.4);
+  letter-spacing: -0.03em;
+}
+.stat-label {
+  font-size: 12px; color: var(--text-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── INNER PAGE HEADER ────────────────────────── */
+.page-header {
+  position: relative;
+  background: var(--bg-2);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 56px 40px;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: var(--glass-shadow);
+  margin-bottom: 2px;
+}
+.page-header::before {
+  content: '';
+  position: absolute; top: -60px; left: 50%;
+  transform: translateX(-50%);
+  width: 500px; height: 250px;
+  background: radial-gradient(ellipse, rgba(0,212,255,0.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+.page-header::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(176,196,222,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+}
+.page-header-inner { position: relative; z-index: 2; }
+.page-header-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 0.18em;
+  color: rgba(0,212,255,0.6);
+  margin-bottom: 12px; text-transform: uppercase;
+}
+.page-header h1 {
+  font-size: 40px; font-weight: 800;
+  color: var(--text-1);
+  line-height: 1.1; margin-bottom: 12px;
+  letter-spacing: -0.025em;
+}
+.page-header h1 em { font-style: normal; color: var(--cyan); }
+.page-header p {
+  font-size: 16px; color: var(--text-2);
+  font-weight: 300; max-width: 460px;
+  margin: 0 auto;
+}
+
+/* ── GOLDEN RULE ──────────────────────────────── */
+.rule-panel {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r);
+  padding: 32px;
+  box-shadow: var(--glass-shadow);
+}
+.rule-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 0.14em;
+  color: var(--cyan); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.rule-title {
+  font-size: 22px; font-weight: 700;
+  color: var(--text-1); margin-bottom: 20px;
+}
+.rule-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.rule-col { border-radius: 10px; padding: 16px; }
+.rule-col.pub {
+  background: rgba(0,212,180,0.06);
+  border: 1px solid rgba(0,212,180,0.18);
+}
+.rule-col.priv {
+  background: rgba(255,80,80,0.05);
+  border: 1px solid rgba(255,80,80,0.15);
+}
+.rule-col-title {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+.rule-col.pub .rule-col-title { color: #00D4C0; }
+.rule-col.priv .rule-col-title { color: #FF7070; }
+.rule-col ul { list-style: none; }
+.rule-col ul li {
+  font-size: 12px; color: var(--text-2);
+  padding: 3px 0 3px 14px;
+  position: relative;
+}
+.rule-col.pub ul li::before { content: '✓'; position: absolute; left: 0; top: 3px; color: #00D4C0; font-size: 10px; }
+.rule-col.priv ul li::before { content: '–'; position: absolute; left: 0; top: 2px; color: #FF7070; font-size: 11px; }
+
+/* ── ACCORDION ────────────────────────────────── */
+.accordion {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 11px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  box-shadow: var(--glass-shadow);
+}
+.accordion-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 15px 20px;
+}
+.accordion-row.open {
+  background: rgba(0,212,255,0.04);
+  border-bottom: 1px solid rgba(0,212,255,0.12);
+}
+.acc-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(0,212,255,0.08);
+  border: 1px solid rgba(0,212,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; color: var(--cyan);
+  flex-shrink: 0;
+}
+.acc-title { flex: 1; font-size: 14px; font-weight: 600; color: var(--text-1); }
+.acc-time {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; color: var(--text-3);
+}
+.acc-arrow { color: var(--text-3); }
+.acc-arrow.open { color: var(--cyan); transform: rotate(180deg); }
+
+/* ── CHECKLIST ────────────────────────────────── */
+.cl-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+.cl-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-top-color: rgba(176,196,222,0.22);
+  border-radius: 12px; padding: 16px;
+  box-shadow: var(--glass-shadow);
+}
+.cl-title {
+  font-size: 11px; font-weight: 700;
+  color: var(--text-1);
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 7px;
+  letter-spacing: 0.04em;
+}
+.cl-item {
+  display: flex; align-items: flex-start; gap: 9px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(176,196,222,0.07);
+}
+.cl-item:last-child { border-bottom: none; }
+.cl-box {
+  width: 14px; height: 14px;
+  border: 1.5px solid rgba(176,196,222,0.2);
+  border-radius: 4px; flex-shrink: 0; margin-top: 1px;
+}
+.cl-box.done {
+  background: rgba(0,212,255,0.2);
+  border-color: rgba(0,212,255,0.5);
+  display: flex; align-items: center; justify-content: center;
+}
+.cl-text { font-size: 11px; color: var(--text-2); line-height: 1.4; }
+.cl-text.done { color: var(--text-3); text-decoration: line-through; }
+
+/* ── CONTACT ──────────────────────────────────── */
+.form-label { display: block; font-size: 12px; font-weight: 500; color: var(--text-2); margin-bottom: 6px; }
+.form-input {
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px; color: var(--text-1);
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 14px;
+}
+.form-input::placeholder { color: var(--text-3); }
+textarea.form-input { resize: none; height: 96px; }
+
+/* ── ADMIN TABLE ──────────────────────────────── */
+.admin-tbl {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: var(--glass-shadow);
+}
+.admin-head {
+  display: grid; grid-template-columns: 2fr 3fr 80px;
+  padding: 12px 20px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--glass-border);
+}
+.admin-th {
+  font-size: 10px; font-weight: 600;
+  color: var(--text-3); letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+}
+.admin-row {
+  display: grid; grid-template-columns: 2fr 3fr 80px;
+  padding: 13px 20px; gap: 12px;
+  align-items: center;
+  border-bottom: 1px solid rgba(176,196,222,0.06);
+}
+.admin-row:last-child { border-bottom: none; }
+.admin-row:nth-child(even) { background: rgba(255,255,255,0.015); }
+.admin-resource { display: flex; align-items: center; gap: 10px; }
+.admin-icon {
+  width: 30px; height: 30px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.admin-name-input {
+  background: transparent;
+  border: 1px solid rgba(176,196,222,0.1);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px; color: var(--text-1);
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+}
+.admin-url-input {
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(176,196,222,0.1);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 11px; color: var(--text-2);
+  font-family: 'DM Mono', monospace;
+}
+.admin-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 0.1em;
+  color: var(--text-3);
+  background: rgba(176,196,222,0.06);
+  border: 1px solid rgba(176,196,222,0.12);
+  border-radius: 5px; padding: 4px 9px;
+  text-align: center;
+}
+.admin-footer {
+  padding: 13px 20px;
+  border-top: 1px solid var(--glass-border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,0.02);
+}
+
+/* ── FOOTER ───────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--glass-border);
+  padding: 32px 0;
+  margin-top: 48px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-brand { display: flex; align-items: center; gap: 10px; }
+.footer-logo-img { width: 24px; height: 24px; object-fit: contain; opacity: 0.8; }
+.footer-wordmark { font-size: 13px; font-weight: 600; color: var(--text-1); }
+.footer-wordmark em { font-style: normal; color: var(--cyan); }
+.footer-links { display: flex; gap: 22px; }
+.footer-link { font-size: 13px; color: var(--text-3); cursor: pointer; transition: color 0.15s; }
+.footer-link:hover { color: var(--text-2); }
+.footer-copy { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-3); }
+
+/* ── UTILS ────────────────────────────────────── */
+.gap { height: 52px; }
+.gap-sm { height: 28px; }
+.gap-xs { height: 10px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.col-stack { display: flex; flex-direction: column; gap: 10px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="annotation">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    RECOGNITION ENGINE — CYBER DESIGN SYSTEM v1 &nbsp;|&nbsp; Lucide icons &nbsp;|&nbsp; Glassmorphism
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       NAVBAR
+  ════════════════════════════════════════════ -->
+  <div class="divider">Navigation — Sticky, All Pages</div>
+
+  <nav class="nav">
+    <div class="nav-left">
+      <img src="logo.png" alt="Logo" class="nav-logo-img">
+      <div class="nav-wordmark">The <em>Recognition Engine</em></div>
+    </div>
+
+    <div class="nav-links">
+      <div class="nav-link active">Home</div>
+      <div class="nav-link">About</div>
+      <div class="nav-link">Features</div>
+      <div class="nav-link">Resources</div>
+      <div class="nav-link">Contact</div>
+    </div>
+
+    <button class="nav-cta">
+      Get Access
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </button>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       HOME — HERO
+  ════════════════════════════════════════════ -->
+  <div class="divider">Page — Home — Hero</div>
+
+  <div class="hero">
+    <div class="hero-content">
+      <img src="logo.png" alt="Recognition Engine" class="hero-logo">
+
+      <div class="hero-badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 01-1.275 1.275L3 12l5.813 1.912a2 2 0 011.275 1.275L12 21l1.912-5.813a2 2 0 011.275-1.275L21 12l-5.813-1.912a2 2 0 01-1.275-1.275L12 3z"/></svg>
+        PRODUCT HUB — EXCLUSIVE ACCESS
+      </div>
+
+      <h1 class="hero-h1">The <em>Recognition</em><br>Engine</h1>
+      <p class="hero-sub">CX Team Performance &amp; Recognition Dashboard</p>
+      <div class="hero-divider"></div>
+
+      <div class="hero-panel">
+        <div class="hero-panel-label">WELCOME MESSAGE</div>
+        <p>Welcome — and congratulations on taking this step. Inside this hub you'll find everything you need to run a complete monthly recognition cycle for your CX team. <strong>Great work deserves to be seen.</strong> This system makes sure it is.</p>
+      </div>
+
+      <div class="hero-buttons">
+        <button class="btn-primary">
+          Explore Features
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+        <button class="btn-glass">
+          Access Resources
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="gap-xs"></div>
+
+  <!-- Quickstart -->
+  <div class="quickstart">
+    <div class="qs-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      First 10 minutes
+    </div>
+    <div class="qs-steps">
+      <span class="qs-step">Open Google Sheet</span>
+      <span class="qs-arrow">›</span>
+      <span class="qs-step">Enter agent names</span>
+      <span class="qs-arrow">›</span>
+      <span class="qs-step">Paste CRM data</span>
+      <span class="qs-arrow">›</span>
+      <span class="qs-step">View Leaderboard</span>
+      <span class="qs-arrow">›</span>
+      <span class="qs-step">First ranking live</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       HOME — DELIVERABLES
+  ════════════════════════════════════════════ -->
+  <div class="divider">Home — Deliverables</div>
+
+  <!-- Card 1 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon cyan">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <div class="card-meta">
+        <div class="card-num">DELIVERABLE 01</div>
+        <div class="card-title">Performance Dashboard</div>
+        <div class="card-desc">Google Sheets — 5 tabs, 218 live formulas</div>
+      </div>
+      <button class="card-cta cyan">
+        Open in Google Sheets
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="features-grid">
+        <div class="feature"><div class="feature-dot cyan"></div><span>Auto-ranking leaderboard by weighted score</span></div>
+        <div class="feature"><div class="feature-dot cyan"></div><span>Most Improved agent auto-detected</span></div>
+        <div class="feature"><div class="feature-dot cyan"></div><span>RAG status: Green / Amber / Red per agent</span></div>
+        <div class="feature"><div class="feature-dot cyan"></div><span>Leadership-ready monthly scorecard tab</span></div>
+        <div class="feature"><div class="feature-dot cyan"></div><span>Customisable KPI weights in Settings</span></div>
+        <div class="feature"><div class="feature-dot cyan"></div><span>Supports up to 25 agents out of the box</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon teal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00D4CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+      </div>
+      <div class="card-meta">
+        <div class="card-num">DELIVERABLE 02</div>
+        <div class="card-title">Canva Announcement Template Kit</div>
+        <div class="card-desc">6 editable templates — update each in under 5 minutes</div>
+      </div>
+      <button class="card-cta teal">
+        Open Canva Kit
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="features-grid">
+        <div class="feature"><div class="feature-dot teal"></div><span>Best Performer of the Month</span></div>
+        <div class="feature"><div class="feature-dot teal"></div><span>Top 3 Leaderboard announcement</span></div>
+        <div class="feature"><div class="feature-dot teal"></div><span>Most Improved Agent recognition</span></div>
+        <div class="feature"><div class="feature-dot teal"></div><span>Monthly Team Scorecard one-pager</span></div>
+        <div class="feature"><div class="feature-dot teal"></div><span>Team of the Month celebration</span></div>
+        <div class="feature"><div class="feature-dot teal"></div><span>Annual Champion year-end award</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon silver">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0C4DE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      </div>
+      <div class="card-meta">
+        <div class="card-num">DELIVERABLE 03</div>
+        <div class="card-title">Setup Guide &amp; Reference Manual</div>
+        <div class="card-desc">PDF — 6 pages, printable, step-by-step</div>
+      </div>
+      <button class="card-cta silver">
+        Open PDF Guide
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="features-grid">
+        <div class="feature"><div class="feature-dot silver"></div><span>5-step monthly setup process</span></div>
+        <div class="feature"><div class="feature-dot silver"></div><span>CRM export guides for Zendesk, Freshdesk, HubSpot</span></div>
+        <div class="feature"><div class="feature-dot silver"></div><span>KPI definitions and weighting rationale</span></div>
+        <div class="feature"><div class="feature-dot silver"></div><span>Team rollout script — word for word</span></div>
+        <div class="feature"><div class="feature-dot silver"></div><span>Troubleshooting for 6 common issues</span></div>
+        <div class="feature"><div class="feature-dot silver"></div><span>Printable monthly checklist</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gap-sm"></div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat"><div class="stat-value">218</div><div class="stat-label">Live Formulas</div></div>
+    <div class="stat"><div class="stat-value">6</div><div class="stat-label">Canva Templates</div></div>
+    <div class="stat"><div class="stat-value">25</div><div class="stat-label">Agents Supported</div></div>
+    <div class="stat"><div class="stat-value">5</div><div class="stat-label">Monthly Steps</div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ABOUT PAGE
+  ════════════════════════════════════════════ -->
+  <div class="divider">Page — About</div>
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-header-label">About</div>
+      <h1>Built on a Simple <em>Philosophy</em></h1>
+      <p>Recognition without fairness is noise. Fairness without recognition is invisible.</p>
+    </div>
+  </div>
+
+  <div class="gap-xs"></div>
+
+  <div class="rule-panel">
+    <div class="rule-label">The Golden Rule of This System</div>
+    <div class="rule-title">Public recognition. Private coaching. Always.</div>
+    <div class="rule-cols">
+      <div class="rule-col pub">
+        <div class="rule-col-title">✦ ALWAYS PUBLIC</div>
+        <ul>
+          <li>Best Performer of the Month</li>
+          <li>Most Improved Agent</li>
+          <li>Top 3 Leaderboard announcement</li>
+          <li>Team of the Month celebration</li>
+          <li>Annual Champion recognition</li>
+        </ul>
+      </div>
+      <div class="rule-col priv">
+        <div class="rule-col-title">– ALWAYS PRIVATE</div>
+        <ul>
+          <li>Low performance or low scores</li>
+          <li>Individual ranking (except top 3)</li>
+          <li>Coaching conversations</li>
+          <li>Improvement plans</li>
+          <li>Any agent asking where they placed</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       FEATURES — ACCORDION
+  ════════════════════════════════════════════ -->
+  <div class="divider">Page — Features — Step Accordion</div>
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-header-label">Features</div>
+      <h1>Everything You Need, <em>Nothing You Don't</em></h1>
+      <p>Three deliverables. One complete recognition cycle. Ready on day one.</p>
+    </div>
+  </div>
+
+  <div class="gap-sm"></div>
+
+  <div class="accordion">
+    <div class="accordion-row"><div class="acc-num">1</div><div class="acc-title">Update Settings Tab</div><div class="acc-time">~2 min</div><svg class="acc-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+  </div>
+  <div class="accordion">
+    <div class="accordion-row"><div class="acc-num">2</div><div class="acc-title">Pull Your Data From the CRM</div><div class="acc-time">~10 min</div><svg class="acc-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+  </div>
+  <div class="accordion">
+    <div class="accordion-row open"><div class="acc-num">3</div><div class="acc-title">Paste Into the Data Input Tab</div><div class="acc-time">~5 min</div><svg class="acc-arrow open" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+  </div>
+  <div class="accordion">
+    <div class="accordion-row"><div class="acc-num">4</div><div class="acc-title">Review the Leaderboard &amp; Scorecard</div><div class="acc-time">~2 min</div><svg class="acc-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+  </div>
+  <div class="accordion">
+    <div class="accordion-row"><div class="acc-num">5</div><div class="acc-title">Announce &amp; Celebrate</div><div class="acc-time">~5 min</div><svg class="acc-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       RESOURCES — CHECKLIST
+  ════════════════════════════════════════════ -->
+  <div class="divider">Page — Resources — Monthly Checklist</div>
+
+  <div class="cl-grid">
+    <div class="cl-card">
+      <div class="cl-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M20 12h2M2 12h2M19.07 19.07l-1.41-1.41M5.34 5.34 3.93 3.93"/></svg>
+        SETUP
+      </div>
+      <div class="cl-item"><div class="cl-box done"><svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="#00D4FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></div><div class="cl-text done">Reporting month updated</div></div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">Team name confirmed</div></div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">KPI weights reviewed (100%)</div></div>
+    </div>
+    <div class="cl-card">
+      <div class="cl-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        DATA
+      </div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">Agent names in Column B</div></div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">All 5 KPIs in yellow cells</div></div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">Previous month in blue cells</div></div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">No errors in Weighted Score</div></div>
+    </div>
+    <div class="cl-card">
+      <div class="cl-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        REVIEW
+      </div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">Top 3 verified vs CRM</div></div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">Most Improved confirmed</div></div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">Scorecard shared with leadership</div></div>
+    </div>
+    <div class="cl-card">
+      <div class="cl-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+        ANNOUNCE
+      </div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">Best Performer card posted</div></div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">Most Improved card posted</div></div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">Announced within 48 hrs</div></div>
+      <div class="cl-item"><div class="cl-box"></div><div class="cl-text">1:1 coaching booked (Red)</div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       CONTACT PAGE
+  ════════════════════════════════════════════ -->
+  <div class="divider">Page — Contact</div>
+
+  <div class="page-header" style="margin-bottom:2px;">
+    <div class="page-header-inner">
+      <div class="page-header-label">Contact</div>
+      <h1>We'd Love to <em>Hear From You</em></h1>
+      <p>Questions, feedback, or just want to share how your first cycle went?</p>
+    </div>
+  </div>
+
+  <div class="gap-xs"></div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-header" style="border-bottom:none;padding-bottom:0;">
+        <div class="card-meta">
+          <div class="card-title" style="font-size:16px;">Send a Message</div>
+          <div class="card-desc">We'll get back within one business day.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <label class="form-label">Name</label>
+        <input class="form-input" placeholder="Your full name">
+        <label class="form-label">Email</label>
+        <input class="form-input" placeholder="you@example.com">
+        <label class="form-label">Message</label>
+        <textarea class="form-input" placeholder="How can we help you?"></textarea>
+        <button class="btn-primary" style="width:100%;justify-content:center;margin-top:2px;">
+          Send Message
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="col-stack">
+      <div class="card" style="flex:1;">
+        <div class="card-header" style="border-bottom:none;">
+          <div class="card-icon cyan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <div class="card-meta"><div class="card-title" style="font-size:14px;">Response Time</div><div class="card-desc">Within 1 business day</div></div>
+        </div>
+      </div>
+      <div class="card" style="flex:1;">
+        <div class="card-header" style="border-bottom:none;">
+          <div class="card-icon teal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00D4CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+          <div class="card-meta"><div class="card-title" style="font-size:14px;">Setup Support</div><div class="card-desc">Covered in the PDF guide</div></div>
+        </div>
+      </div>
+      <div class="card" style="flex:1;">
+        <div class="card-header" style="border-bottom:none;">
+          <div class="card-icon silver"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B0C4DE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          <div class="card-meta"><div class="card-title" style="font-size:14px;">Privacy</div><div class="card-desc">We never share your data</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ADMIN PAGE
+  ════════════════════════════════════════════ -->
+  <div class="divider">Page — Admin Dashboard</div>
+
+  <div style="background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.18);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span style="font-size:12px;color:rgba(0,212,255,0.8);">Only secure <strong style="color:#00D4FF;">HTTPS</strong> links accepted. Changes write to <code style="font-family:'DM Mono',monospace;background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:3px;">data/links.json</code></span>
+  </div>
+
+  <div class="admin-tbl">
+    <div class="admin-head">
+      <div class="admin-th">Resource Name</div>
+      <div class="admin-th">URL / Source Path</div>
+      <div class="admin-th">Type</div>
+    </div>
+    <div class="admin-row">
+      <div class="admin-resource">
+        <div class="admin-icon" style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.18);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <input class="admin-name-input" value="Google Sheets Tracker">
+      </div>
+      <input class="admin-url-input" value="https://docs.google.com/spreadsheets/d/...">
+      <div class="admin-badge">SHEETS</div>
+    </div>
+    <div class="admin-row">
+      <div class="admin-resource">
+        <div class="admin-icon" style="background:rgba(0,212,204,0.08);border:1px solid rgba(0,212,204,0.18);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00D4CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+        </div>
+        <input class="admin-name-input" value="Canva Template Kit">
+      </div>
+      <input class="admin-url-input" value="https://www.canva.com/design/...">
+      <div class="admin-badge">CANVA</div>
+    </div>
+    <div class="admin-row">
+      <div class="admin-resource">
+        <div class="admin-icon" style="background:rgba(176,196,222,0.08);border:1px solid rgba(176,196,222,0.18);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B0C4DE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+        </div>
+        <input class="admin-name-input" value="Manager's PDF Guide">
+      </div>
+      <input class="admin-url-input" value="https://example.com/guide.pdf">
+      <div class="admin-badge">PDF</div>
+    </div>
+    <div class="admin-footer">
+      <span style="font-size:11px;color:var(--text-3);">All changes saved to data/links.json</span>
+      <button class="nav-cta" style="font-size:12px;padding:7px 16px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Changes
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════ -->
+  <div class="footer">
+    <div class="footer-brand">
+      <img src="logo.png" alt="" class="footer-logo-img">
+      <div class="footer-wordmark">The <em>Recognition Engine</em></div>
+    </div>
+    <div class="footer-links">
+      <span class="footer-link">Home</span>
+      <span class="footer-link">About</span>
+      <span class="footer-link">Features</span>
+      <span class="footer-link">Resources</span>
+      <span class="footer-link">Contact</span>
+    </div>
+    <div class="footer-copy">Built for CX managers who believe great teams deserve to be seen.</div>
+  </div>
+
+</div>
+</body>
+</html>
