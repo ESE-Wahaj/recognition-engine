@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useState } from 'react'
-import { Button } from '@/components/ui/Button'
+import { ShinyButton } from '@/components/ui/shiny-button'
 
 const schema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -114,9 +114,9 @@ export function ContactForm() {
         )}
       </div>
 
-      <Button type="submit" variant="primary" loading={isSubmitting} className="w-full">
+      <ShinyButton type="submit" variant="primary" loading={isSubmitting} className="w-full">
         {isSubmitting ? 'Sending…' : 'Send Message →'}
-      </Button>
+      </ShinyButton>
     </form>
   )
 }

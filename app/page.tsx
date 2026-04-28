@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { readLinks } from '@/lib/links'
+import { ShinyButton } from '@/components/ui/shiny-button'
 
 export const metadata: Metadata = {
   title: 'Home — CX Team Performance & Recognition',
@@ -129,36 +130,33 @@ export default async function HomePage() {
             href={links.sheets.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-gold/30"
-            style={{ background: 'linear-gradient(135deg, #C9952A 0%, #E8B84B 50%, #C9952A 100%)' }}
+            className="inline-flex items-center justify-center"
           >
-            <span className="flex items-center gap-2">
+            <ShinyButton colorScheme="gold" className="w-full justify-center">
               Google Sheets →
-            </span>
+            </ShinyButton>
           </a>
 
           <a
             href={links.canva.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-teal/30"
-            style={{ background: 'linear-gradient(135deg, #1a6b6b 0%, #2d9d9d 100%)' }}
+            className="inline-flex items-center justify-center"
           >
-            <span className="flex items-center gap-2">
+            <ShinyButton colorScheme="teal" className="w-full justify-center">
               Canva Kit →
-            </span>
+            </ShinyButton>
           </a>
 
           <a
             href={links.pdf.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-rose/30"
-            style={{ background: 'linear-gradient(135deg, #c41e3a 0%, #e8597b 100%)' }}
+            className="inline-flex items-center justify-center"
           >
-            <span className="flex items-center gap-2">
+            <ShinyButton colorScheme="rose" className="w-full justify-center">
               PDF Guide →
-            </span>
+            </ShinyButton>
           </a>
         </div>
       </section>

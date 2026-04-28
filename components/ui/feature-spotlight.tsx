@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { Button, type ButtonProps } from '@/components/ui/Button'
+import { ShinyButton } from '@/components/ui/shiny-button'
 
 interface AnimatedFeatureSpotlightProps extends React.HTMLAttributes<HTMLElement> {
   preheaderIcon?: React.ReactNode
@@ -11,7 +11,6 @@ interface AnimatedFeatureSpotlightProps extends React.HTMLAttributes<HTMLElement
   heading: React.ReactNode
   description: string
   buttonText: string
-  buttonProps?: ButtonProps
   buttonHref?: string
   imageUrl: string
   imageAlt?: string
@@ -26,7 +25,6 @@ const AnimatedFeatureSpotlight = React.forwardRef<HTMLElement, AnimatedFeatureSp
       heading,
       description,
       buttonText,
-      buttonProps,
       buttonHref,
       imageUrl,
       imageAlt = 'Feature illustration',
@@ -34,11 +32,7 @@ const AnimatedFeatureSpotlight = React.forwardRef<HTMLElement, AnimatedFeatureSp
     },
     ref
   ) => {
-    const buttonElement = (
-      <Button size="lg" {...buttonProps}>
-        {buttonText}
-      </Button>
-    )
+    const buttonElement = <ShinyButton>{buttonText}</ShinyButton>
 
     const buttonContent = buttonHref ? (
       <Link href={buttonHref}>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/Button'
+import { ShinyButton } from '@/components/ui/shiny-button'
 
 export function AdminLoginForm() {
   const [password, setPassword] = useState('')
@@ -62,9 +62,9 @@ export function AdminLoginForm() {
         )}
       </div>
 
-      <Button type="submit" variant="gold" loading={loading} className="w-full">
+      <ShinyButton type="submit" variant="gold" loading={loading} className="w-full">
         {loading ? 'Signing in…' : 'Sign In →'}
-      </Button>
+      </ShinyButton>
     </form>
   )
 }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { type ResourceLinks } from '@/lib/config'
-import { Button } from '@/components/ui/Button'
+import { ShinyButton } from '@/components/ui/shiny-button'
 
 interface AdminDashboardProps {
   initialLinks: ResourceLinks
@@ -120,9 +120,9 @@ export function AdminDashboard({ initialLinks }: AdminDashboardProps) {
         ) : (
           <p className="text-xs text-mist">All changes are saved to data/links.json on the server.</p>
         )}
-        <Button variant="gold" onClick={handleSave} loading={saving}>
+        <ShinyButton variant="gold" onClick={handleSave} disabled={saving}>
           {saving ? 'Saving…' : 'Save Changes'}
-        </Button>
+        </ShinyButton>
       </div>
     </div>
   )

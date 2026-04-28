@@ -62,10 +62,6 @@ export default function AboutPage() {
           description="Share wins publicly to celebrate and motivate. Keep challenges private to coach with care. This balance builds trust, drives performance, and creates a culture where everyone feels seen."
           buttonText="Learn More →"
           buttonHref="/features"
-          buttonProps={{
-            variant: 'primary',
-            size: 'lg',
-          }}
           imageUrl="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&q=80"
           imageAlt="Team collaboration and recognition"
         />
