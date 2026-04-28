@@ -35,10 +35,32 @@ export default async function HomePage() {
         />
 
         <div className="relative max-w-2xl mx-auto">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-gold/15 border border-gold/35 text-yellow-300 font-mono text-[11px] tracking-widest px-4 py-1.5 rounded-full mb-7 animate-fade-up">
+          {/* Badge with shimmer effect */}
+          <style>{`
+            @property --gradient-angle-badge {
+              syntax: "<angle>";
+              initial-value: 0deg;
+              inherits: false;
+            }
+            @keyframes shimmer-badge {
+              to { --gradient-angle-badge: 360deg; }
+            }
+            .shimmer-badge {
+              animation: shimmer-badge 3s linear infinite;
+              background: linear-gradient(rgba(30, 20, 10, 0.5), rgba(30, 20, 10, 0.5)) padding-box,
+                conic-gradient(
+                  from var(--gradient-angle-badge),
+                  transparent,
+                  #C9952A 5%,
+                  #E8B84B 10%,
+                  #C9952A 15%,
+                  transparent 20%
+                ) border-box;
+            }
+          `}</style>
+          <div className="shimmer-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-7 animate-fade-up border border-transparent">
             <span className="text-[9px]">✦</span>
-            PRODUCT HUB — EXCLUSIVE ACCESS
+            <span className="font-mono text-[11px] tracking-widest text-yellow-300">PRODUCT HUB — EXCLUSIVE ACCESS</span>
           </div>
 
           {/* Title */}
@@ -77,18 +99,15 @@ export default async function HomePage() {
 
           {/* CTA buttons */}
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link
-              href="/features"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm text-ink hover:opacity-90 active:scale-[.98] transition-all"
-              style={{ backgroundImage: 'linear-gradient(135deg, #C9952A 0%, #E8B84B 50%, #C9952A 100%)' }}
-            >
-              Explore Features →
+            <Link href="/features" className="inline-flex">
+              <ShinyButton colorScheme="gold">
+                Explore Features →
+              </ShinyButton>
             </Link>
-            <Link
-              href="/resources"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm text-white border border-white/20 hover:bg-white/10 active:scale-[.98] transition-all"
-            >
-              Access Resources
+            <Link href="/resources" className="inline-flex">
+              <ShinyButton colorScheme="teal">
+                Access Resources
+              </ShinyButton>
             </Link>
           </div>
         </div>

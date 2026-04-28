@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { ChecklistGrid } from '@/components/ChecklistGrid'
 import { GlowCard } from '@/components/ui/spotlight-card'
+import { ShinyButton } from '@/components/ui/shiny-button'
 import { readLinks } from '@/lib/links'
 
 export const metadata: Metadata = {
@@ -149,15 +150,14 @@ export default async function ResourcesPage() {
                 href={r.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap flex-shrink-0 transition-all hover:opacity-90 active:scale-[.98] relative z-10 ${
-                  r.color === 'gold'
-                    ? 'bg-gold text-ink'
-                    : r.color === 'teal'
-                    ? 'bg-teal text-white'
-                    : 'bg-rose text-white'
-                }`}
+                className="relative z-10 flex-shrink-0"
               >
-                {r.buttonLabel}
+                <ShinyButton 
+                  colorScheme={r.color === 'gold' ? 'gold' : r.color === 'teal' ? 'teal' : 'rose'}
+                  className="text-sm"
+                >
+                  {r.buttonLabel}
+                </ShinyButton>
               </a>
             </GlowCard>
           ))}

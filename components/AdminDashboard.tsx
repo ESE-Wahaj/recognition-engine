@@ -120,7 +120,7 @@ export function AdminDashboard({ initialLinks }: AdminDashboardProps) {
         ) : (
           <p className="text-xs text-mist">All changes are saved to data/links.json on the server.</p>
         )}
-        <ShinyButton variant="gold" onClick={handleSave} disabled={saving}>
+        <ShinyButton colorScheme="gold" onClick={handleSave} disabled={saving}>
           {saving ? 'Saving…' : 'Save Changes'}
         </ShinyButton>
       </div>

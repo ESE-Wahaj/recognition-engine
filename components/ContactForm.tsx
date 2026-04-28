@@ -114,7 +114,7 @@ export function ContactForm() {
         )}
       </div>
 
-      <ShinyButton type="submit" variant="primary" loading={isSubmitting} className="w-full">
+      <ShinyButton type="submit" colorScheme="gold" loading={isSubmitting} className="w-full">
         {isSubmitting ? 'Sending…' : 'Send Message →'}
       </ShinyButton>
     </form>

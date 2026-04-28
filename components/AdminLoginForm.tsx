@@ -62,7 +62,7 @@ export function AdminLoginForm() {
         )}
       </div>
 
-      <ShinyButton type="submit" variant="gold" loading={loading} className="w-full">
+      <ShinyButton type="submit" colorScheme="gold" loading={loading} className="w-full">
         {loading ? 'Signing in…' : 'Sign In →'}
       </ShinyButton>
     </form>
