@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { ShinyButton } from '@/components/ui/shiny-button'
 
@@ -84,11 +85,15 @@ const AnimatedFeatureSpotlight = React.forwardRef<HTMLElement, AnimatedFeatureSp
 
             {/* Right Column: Animated Visual */}
             <div className="relative w-full min-h-[250px] md:min-h-[320px] flex items-center justify-center animate-in fade-in zoom-in-95 duration-700 delay-200">
-              <img
-                src={imageUrl}
-                alt={imageAlt}
-                className="w-full max-w-md object-contain animate-float"
-              />
+              <div className="relative w-full max-w-md aspect-video animate-float">
+                <Image
+                  src={imageUrl}
+                  alt={imageAlt}
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
             </div>
           </div>
         </section>

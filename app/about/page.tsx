@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { GlowCard } from '@/components/ui/spotlight-card'
 import { AnimatedFeatureSpotlight } from '@/components/ui/feature-spotlight'
