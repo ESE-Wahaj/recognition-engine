@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SectionHeader } from '@/components/ui/SectionHeader'
-import { ResourceCard } from '@/components/ResourceCard'
 import { readLinks } from '@/lib/links'
 
 export const metadata: Metadata = {
@@ -16,60 +14,6 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const links = readLinks()
-
-  const deliverables = [
-    {
-      number: 'DELIVERABLE 01',
-      title: 'Performance Dashboard',
-      description: 'Google Sheets — 5 tabs, 218 live formulas',
-      icon: '📊',
-      accent: 'gold' as const,
-      buttonLabel: 'Open in Google Sheets',
-      href: links.sheets.url,
-      features: [
-        'Auto-ranking leaderboard by weighted score',
-        'Most Improved agent auto-detected',
-        'RAG status: Green / Amber / Red per agent',
-        'Leadership-ready monthly scorecard tab',
-        'Customisable KPI weights in Settings',
-        'Supports up to 25 agents out of the box',
-      ],
-    },
-    {
-      number: 'DELIVERABLE 02',
-      title: 'Canva Announcement Template Kit',
-      description: '6 editable templates — update each in under 5 minutes',
-      icon: '🎨',
-      accent: 'teal' as const,
-      buttonLabel: 'Open Canva Kit',
-      href: links.canva.url,
-      features: [
-        'Best Performer of the Month',
-        'Top 3 Leaderboard announcement',
-        'Most Improved Agent recognition',
-        'Monthly Team Scorecard one-pager',
-        'Team of the Month celebration',
-        'Annual Champion year-end award',
-      ],
-    },
-    {
-      number: 'DELIVERABLE 03',
-      title: 'Setup Guide & Reference Manual',
-      description: 'PDF — 6 pages, printable, step-by-step',
-      icon: '📖',
-      accent: 'rose' as const,
-      buttonLabel: 'Open PDF Guide',
-      href: links.pdf.url,
-      features: [
-        '5-step monthly setup process',
-        'CRM export guides for Zendesk, Freshdesk, HubSpot',
-        'KPI definitions and weighting rationale',
-        'Team rollout script — word for word',
-        'Troubleshooting for 6 common issues',
-        'Printable monthly checklist',
-      ],
-    },
-  ]
 
   return (
     <>
@@ -121,7 +65,7 @@ export default async function HomePage() {
 
           {/* Welcome panel */}
           <div className="bg-white/6 border border-white/10 rounded-xl p-6 text-left mb-10">
-            <p className="font-mono text-[10px] tracking-[0.12em] text-yellow-300 mb-2">WELCOME MESSAGE</p>
+            <p className="font-mono text-[10px] tracking-[0.12em] text-yellow-300 mb-2">Greetings</p>
             <p className="text-sm text-white/70 leading-relaxed">
               Welcome — and congratulations on taking this step. Inside this hub you&apos;ll find everything
               you need to run a complete monthly recognition cycle for your CX team.{' '}
@@ -174,19 +118,54 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* ── Deliverables ─────────────────────────────────────────────── */}
-      <section className="max-w-5xl mx-auto px-6 py-14" aria-label="Deliverables">
-        <SectionHeader label="Your Deliverables" />
-        <div className="flex flex-col gap-5">
-          {deliverables.map((d) => (
-            <ResourceCard key={d.title} {...d} />
-          ))}
+      {/* ── Quick Access Buttons ─────────────────────────────────────── */}
+      <section
+        className="w-full px-6 py-6"
+        aria-label="Quick access buttons"
+        style={{ background: 'linear-gradient(135deg, #0D0D14 0%, #1A1A2E 100%)' }}
+      >
+        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <a
+            href={links.sheets.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-gold/30"
+            style={{ background: 'linear-gradient(135deg, #C9952A 0%, #E8B84B 50%, #C9952A 100%)' }}
+          >
+            <span className="flex items-center gap-2">
+              Google Sheets →
+            </span>
+          </a>
+
+          <a
+            href={links.canva.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-teal/30"
+            style={{ background: 'linear-gradient(135deg, #1a6b6b 0%, #2d9d9d 100%)' }}
+          >
+            <span className="flex items-center gap-2">
+              Canva Kit →
+            </span>
+          </a>
+
+          <a
+            href={links.pdf.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-rose/30"
+            style={{ background: 'linear-gradient(135deg, #c41e3a 0%, #e8597b 100%)' }}
+          >
+            <span className="flex items-center gap-2">
+              PDF Guide →
+            </span>
+          </a>
         </div>
       </section>
 
       {/* ── Stats strip ──────────────────────────────────────────────── */}
       <section
-        className="py-10 px-6"
+        className="py-2 px-6"
         style={{ background: 'linear-gradient(135deg, #0D0D14 0%, #1A1A2E 100%)' }}
         aria-label="Platform statistics"
       >
