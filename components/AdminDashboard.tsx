@@ -133,7 +133,7 @@ export function AdminDashboard({ initialLinks }: AdminDashboardProps) {
         {isVercel && (
           <div className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3">
             <p className="font-semibold mb-1">⚠️ Vercel Deployment Notice</p>
-            <p className="mb-2">Vercel's serverless environment doesn't persist filesystem changes. To save changes permanently:</p>
+            <p className="mb-2">Vercel&apos;s serverless environment doesn&apos;t persist filesystem changes. To save changes permanently:</p>
             <ol className="list-decimal list-inside space-y-1 mb-2">
               <li>Go to your Vercel project dashboard</li>
               <li>Click <strong>Storage</strong> tab</li>
