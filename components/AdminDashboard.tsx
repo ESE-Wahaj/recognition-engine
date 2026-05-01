@@ -20,7 +20,8 @@ export function AdminDashboard({ initialLinks }: AdminDashboardProps) {
     pdf: { ...initialLinks.pdf },
   })
   const [saving, setSaving] = useState(false)
-  const [status, setStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
+  const [status, setStatus] = useState<{ type: 'success' | 'error' | 'warning'; message: string } | null>(null)
+  const isVercel = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')
 
   const update = (key: keyof ResourceLinks, field: keyof FieldState, value: string) => {
     setFields((prev) => ({ ...prev, [key]: { ...prev[key], [field]: value } }))
@@ -50,10 +51,20 @@ export function AdminDashboard({ initialLinks }: AdminDashboardProps) {
         setStatus({ type: 'success', message: 'Links saved successfully.' })
       } else {
         const data = await res.json() as { error?: string }
-        setStatus({ type: 'error', message: data.error ?? 'Failed to save links.' })
+        const errorMsg = data.error ?? 'Failed to save links.'
+        
+        if (isVercel && errorMsg.includes('Vercel')) {
+          setStatus({ 
+            type: 'warning', 
+            message: 'Vercel requires KV storage for persistence. See setup instructions above.' 
+          })
+        } else {
+          setStatus({ type: 'error', message: errorMsg })
+        }
       }
-    } catch {
-      setStatus({ type: 'error', message: 'Network error. Please try again.' })
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Network error. Please try again.'
+      setStatus({ type: 'error', message: errorMsg })
     } finally {
       setSaving(false)
     }
@@ -107,22 +118,40 @@ export function AdminDashboard({ initialLinks }: AdminDashboardProps) {
       ))}
 
       {/* Footer */}
-      <div className="px-5 py-4 border-t border-border-base flex items-center justify-between gap-4 flex-wrap bg-surface">
+      <div className="px-5 py-4 border-t border-border-base flex flex-col gap-3 bg-surface">
         {status ? (
           <p
             role="status"
             className={`text-sm font-medium ${
-              status.type === 'success' ? 'text-emerald-700' : 'text-rose'
+              status.type === 'success' ? 'text-emerald-700' : status.type === 'warning' ? 'text-amber-700' : 'text-rose'
             }`}
           >
-            {status.type === 'success' ? '✓ ' : '✕ '}{status.message}
+            {status.type === 'success' ? '✓ ' : status.type === 'warning' ? '⚠ ' : '✕ '}{status.message}
           </p>
-        ) : (
-          <p className="text-xs text-mist">All changes are saved to data/links.json on the server.</p>
+        ) : null}
+        
+        {isVercel && (
+          <div className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3">
+            <p className="font-semibold mb-1">⚠️ Vercel Deployment Notice</p>
+            <p className="mb-2">Vercel's serverless environment doesn't persist filesystem changes. To save changes permanently:</p>
+            <ol className="list-decimal list-inside space-y-1 mb-2">
+              <li>Go to your Vercel project dashboard</li>
+              <li>Click <strong>Storage</strong> tab</li>
+              <li>Create <strong>Vercel KV</strong> (Redis database)</li>
+              <li>Redeploy your app</li>
+            </ol>
+            <p className="text-xs">Without Vercel KV, changes will be lost. Local development works fine with file storage.</p>
+          </div>
         )}
-        <ShinyButton colorScheme="gold" onClick={handleSave} disabled={saving}>
-          {saving ? 'Saving…' : 'Save Changes'}
-        </ShinyButton>
+        
+        <div className="flex items-center justify-between gap-4">
+          <p className="text-xs text-mist">
+            {isVercel ? 'Changes require Vercel KV setup to persist.' : 'All changes are saved to data/links.json on the server.'}
+          </p>
+          <ShinyButton colorScheme="gold" onClick={handleSave} disabled={saving || (isVercel && !status?.message.includes('KV'))}>
+            {saving ? 'Saving…' : 'Save Changes'}
+          </ShinyButton>
+        </div>
       </div>
     </div>
   )
