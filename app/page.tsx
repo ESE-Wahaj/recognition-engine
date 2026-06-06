@@ -353,12 +353,12 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="flex gap-2 sm:gap-3 justify-center">
             <a href="#features" className="inline-flex">
-              <ShinyButton colorScheme="gold">Explore Features →</ShinyButton>
+              <ShinyButton colorScheme="gold" className="hero-btn">Explore Features →</ShinyButton>
             </a>
             <a href="#resources" className="inline-flex">
-              <ShinyButton colorScheme="teal">Access Resources</ShinyButton>
+              <ShinyButton colorScheme="teal" className="hero-btn">Access Resources</ShinyButton>
             </a>
           </div>
         </div>
