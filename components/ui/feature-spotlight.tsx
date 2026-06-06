@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { ShinyButton } from '@/components/ui/shiny-button'
@@ -36,9 +35,9 @@ const AnimatedFeatureSpotlight = React.forwardRef<HTMLElement, AnimatedFeatureSp
     const buttonElement = <ShinyButton>{buttonText}</ShinyButton>
 
     const buttonContent = buttonHref ? (
-      <Link href={buttonHref}>
+      <a href={buttonHref}>
         {buttonElement}
-      </Link>
+      </a>
     ) : (
       buttonElement
     )

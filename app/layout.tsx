@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, DM_Sans, DM_Mono } from 'next/font/google'
 import './globals.css'
-import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
+import { SiteDock } from '@/components/SiteDock'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -54,9 +54,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable} ${dmMono.variable}`}>
       <body className="font-sans antialiased bg-surface text-ink min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 pb-28">{children}</main>
         <Footer />
+        <SiteDock />
       </body>
     </html>
   )

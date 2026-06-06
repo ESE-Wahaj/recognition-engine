@@ -12,7 +12,7 @@ export interface ResourceLinks {
 export const RESOURCE_LINKS: ResourceLinks = {
   sheets: {
     label: 'Google Sheets Tracker',
-    url: 'https://docs.google.com/spreadsheets/d/your-sheet-id/edit',
+    url: 'https://docs.google.com/spreadsheets/d/1w1xyDVaTOYFZ3qqvM3io0pWkcz4088RH--MyRKabJnA/edit?usp=sharing',
   },
   canva: {
     label: 'Canva Template Kit',
