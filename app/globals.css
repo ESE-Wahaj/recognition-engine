@@ -71,13 +71,7 @@ html {
   to { --gradient-angle-badge: 360deg; }
 }
 
-/* ── Hero buttons — compact on mobile ───────────────────────────── */
-@media (max-width: 639px) {
-  .hero-btn {
-    padding: 0.7rem 1.1rem !important;
-    font-size: 0.82rem !important;
-  }
-}
+
 
 .shimmer-badge {
   animation: shimmer-badge 3s linear infinite;
