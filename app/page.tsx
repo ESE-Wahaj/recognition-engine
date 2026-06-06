@@ -518,21 +518,29 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Deliverables */}
-      <section className="max-w-5xl mx-auto px-6 py-14" aria-label="Deliverables">
-        <SectionHeader label="Your Deliverables" />
-        <div className="flex flex-col gap-5">
-          {deliverables.map((d) => (
-            <ResourceCard key={d.title} {...d} />
-          ))}
-        </div>
-      </section>
+      {/* Deliverables + Monthly Process — shared gradient canvas */}
+      <div
+        style={{
+          background:
+            'linear-gradient(160deg, #f2e0a6 0%, #f7f7fa 45%, #faeee3 75%, #f5e8d0 100%)',
+        }}
+      >
+        {/* Deliverables */}
+        <section className="max-w-5xl mx-auto px-6 py-14" aria-label="Deliverables">
+          <SectionHeader label="Your Deliverables" />
+          <div className="flex flex-col gap-5">
+            {deliverables.map((d) => (
+              <ResourceCard key={d.title} {...d} />
+            ))}
+          </div>
+        </section>
 
-      {/* Monthly Process */}
-      <section className="max-w-5xl mx-auto px-6 pb-14" aria-label="Monthly process">
-        <SectionHeader label="Monthly Process — 5 Steps" />
-        <StepAccordion steps={steps} />
-      </section>
+        {/* Monthly Process */}
+        <section className="max-w-5xl mx-auto px-6 pb-14" aria-label="Monthly process">
+          <SectionHeader label="Monthly Process — 5 Steps" />
+          <StepAccordion steps={steps} />
+        </section>
+      </div>
 
       {/* ── RESOURCES ────────────────────────────────────────────────── */}
       <section
@@ -657,71 +665,80 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Contact form + Quick info */}
-      <section
-        className="max-w-5xl mx-auto px-6 py-14 grid md:grid-cols-2 gap-12"
-        aria-label="Contact form"
+      {/* Contact form + FAQ — shared gradient canvas */}
+      <div
+        className="pb-8"
+        style={{
+          background:
+            'linear-gradient(140deg, #eeddf5 0%, #f7f7fa 38%, #fddede 72%, #f2e4b2 100%)',
+        }}
       >
-        <div>
-          <h2 className="font-display text-2xl font-bold text-ink mb-3">Send a Message</h2>
-          <p className="text-mist text-sm leading-relaxed mb-6">
-            Fill in the form and we&apos;ll get back to you within one business day. For urgent setup
-            issues, check the FAQ below first — most common questions are answered there.
-          </p>
-          <ContactForm />
-        </div>
-        <div>
-          <h2 className="font-display text-2xl font-bold text-ink mb-6">Quick Info</h2>
-          <div className="space-y-4">
-            {[
-              { icon: '⚡', label: 'Response Time', value: 'Within 1 business day' },
-              { icon: '📖', label: 'Setup Support', value: 'Covered in the PDF guide' },
-              { icon: '🔒', label: 'Privacy', value: 'We never share your data' },
-            ].map(({ icon, label, value }) => (
-              <div
-                key={label}
-                className="flex items-start gap-3 p-4 bg-white border border-border-base rounded-xl"
-              >
-                <span className="text-xl">{icon}</span>
-                <div>
-                  <p className="text-sm font-semibold text-ink">{label}</p>
-                  <p className="text-sm text-mist">{value}</p>
+        {/* Contact form + Quick info */}
+        <section
+          className="max-w-5xl mx-auto px-6 py-14 grid md:grid-cols-2 gap-12"
+          aria-label="Contact form"
+        >
+          <div>
+            <h2 className="font-display text-2xl font-bold text-ink mb-3">Send a Message</h2>
+            <p className="text-mist text-sm leading-relaxed mb-6">
+              Fill in the form and we&apos;ll get back to you within one business day. For urgent setup
+              issues, check the FAQ below first — most common questions are answered there.
+            </p>
+            <ContactForm />
+          </div>
+          <div>
+            <h2 className="font-display text-2xl font-bold text-ink mb-6">Quick Info</h2>
+            <div className="space-y-4">
+              {[
+                { icon: '⚡', label: 'Response Time', value: 'Within 1 business day' },
+                { icon: '📖', label: 'Setup Support', value: 'Covered in the PDF guide' },
+                { icon: '🔒', label: 'Privacy', value: 'We never share your data' },
+              ].map(({ icon, label, value }) => (
+                <div
+                  key={label}
+                  className="flex items-start gap-3 p-4 bg-white/70 backdrop-blur-sm border border-border-base rounded-xl"
+                >
+                  <span className="text-xl">{icon}</span>
+                  <div>
+                    <p className="text-sm font-semibold text-ink">{label}</p>
+                    <p className="text-sm text-mist">{value}</p>
+                  </div>
                 </div>
-              </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="max-w-5xl mx-auto px-6 pb-14" aria-label="FAQ">
+          <SectionHeader label="Frequently Asked Questions" />
+          <div className="space-y-3">
+            {faqs.map(({ q, a }) => (
+              <details
+                key={q}
+                className="bg-white/70 backdrop-blur-sm border border-border-base rounded-xl group overflow-hidden"
+              >
+                <summary className="flex items-center justify-between gap-4 p-5 cursor-pointer list-none font-semibold text-sm text-ink hover:bg-white/60 transition-colors">
+                  {q}
+                  <svg
+                    className="w-4 h-4 text-mist flex-shrink-0 transition-transform group-open:rotate-180"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    aria-hidden
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </summary>
+                <div className="px-5 pb-5 pt-3 border-t border-border-base">
+                  <p className="text-sm text-mist leading-relaxed">{a}</p>
+                </div>
+              </details>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="max-w-5xl mx-auto px-6 pb-14" aria-label="FAQ">
-        <SectionHeader label="Frequently Asked Questions" />
-        <div className="space-y-3">
-          {faqs.map(({ q, a }) => (
-            <details
-              key={q}
-              className="bg-white border border-border-base rounded-xl group overflow-hidden"
-            >
-              <summary className="flex items-center justify-between gap-4 p-5 cursor-pointer list-none font-semibold text-sm text-ink hover:bg-surface transition-colors">
-                {q}
-                <svg
-                  className="w-4 h-4 text-mist flex-shrink-0 transition-transform group-open:rotate-180"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  aria-hidden
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </summary>
-              <div className="px-5 pb-5 pt-3 border-t border-border-base">
-                <p className="text-sm text-mist leading-relaxed">{a}</p>
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
+        </section>
+      </div>
     </>
   )
 }

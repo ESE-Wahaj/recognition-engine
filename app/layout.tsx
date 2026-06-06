@@ -54,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable} ${dmMono.variable}`}>
       <body className="font-sans antialiased bg-surface text-ink min-h-screen flex flex-col">
-        <main className="flex-1 pb-28">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
         <SiteDock />
       </body>
