@@ -49,7 +49,7 @@ const faqs = [
 ]
 
 export default async function HomePage() {
-  const links = readLinks()
+  const links = await readLinks()
 
   const deliverables = [
     {

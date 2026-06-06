@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorised.' }, { status: 401 })
   }
   try {
-    const links = readLinks()
+    const links = await readLinks()
     return NextResponse.json(links)
   } catch (error) {
     console.error('Failed to read links:', error)
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
       pdf: { label: pdf.label, url: pdf.url },
     }
 
-    writeLinks(links)
+    await writeLinks(links)
     return NextResponse.json({ ok: true, links })
   } catch (error) {
     console.error('Failed to save links:', error)

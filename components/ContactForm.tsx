@@ -16,6 +16,7 @@ type FormData = z.infer<typeof schema>
 
 export function ContactForm() {
   const [sent, setSent] = useState(false)
+  const [serverError, setServerError] = useState<string | null>(null)
 
   const {
     register,
@@ -25,10 +26,22 @@ export function ContactForm() {
   } = useForm<FormData>({ resolver: zodResolver(schema) })
 
   const onSubmit = async (data: FormData) => {
-    await new Promise((r) => setTimeout(r, 800))
-    console.info('Contact form submitted', data)
-    setSent(true)
-    reset()
+    setServerError(null)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({})) as { error?: string }
+        throw new Error(body.error ?? 'Something went wrong.')
+      }
+      setSent(true)
+      reset()
+    } catch (err) {
+      setServerError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+    }
   }
 
   if (sent) {
@@ -113,6 +126,12 @@ export function ContactForm() {
           </p>
         )}
       </div>
+
+      {serverError && (
+        <p role="alert" className="text-sm text-rose bg-rose-light border border-rose/20 rounded-lg px-4 py-3">
+          {serverError}
+        </p>
+      )}
 
       <ShinyButton type="submit" colorScheme="gold" loading={isSubmitting} className="w-full">
         {isSubmitting ? 'Sending…' : 'Send Message →'}

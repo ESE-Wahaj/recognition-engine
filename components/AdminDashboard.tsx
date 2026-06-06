@@ -20,8 +20,7 @@ export function AdminDashboard({ initialLinks }: AdminDashboardProps) {
     pdf: { ...initialLinks.pdf },
   })
   const [saving, setSaving] = useState(false)
-  const [status, setStatus] = useState<{ type: 'success' | 'error' | 'warning'; message: string } | null>(null)
-  const isVercel = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')
+  const [status, setStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
 
   const update = (key: keyof ResourceLinks, field: keyof FieldState, value: string) => {
     setFields((prev) => ({ ...prev, [key]: { ...prev[key], [field]: value } }))
@@ -51,16 +50,7 @@ export function AdminDashboard({ initialLinks }: AdminDashboardProps) {
         setStatus({ type: 'success', message: 'Links saved successfully.' })
       } else {
         const data = await res.json() as { error?: string }
-        const errorMsg = data.error ?? 'Failed to save links.'
-        
-        if (isVercel && errorMsg.includes('Vercel')) {
-          setStatus({ 
-            type: 'warning', 
-            message: 'Vercel requires KV storage for persistence. See setup instructions above.' 
-          })
-        } else {
-          setStatus({ type: 'error', message: errorMsg })
-        }
+        setStatus({ type: 'error', message: data.error ?? 'Failed to save links.' })
       }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Network error. Please try again.'
@@ -123,32 +113,16 @@ export function AdminDashboard({ initialLinks }: AdminDashboardProps) {
           <p
             role="status"
             className={`text-sm font-medium ${
-              status.type === 'success' ? 'text-emerald-700' : status.type === 'warning' ? 'text-amber-700' : 'text-rose'
+              status.type === 'success' ? 'text-emerald-700' : 'text-rose'
             }`}
           >
-            {status.type === 'success' ? '✓ ' : status.type === 'warning' ? '⚠ ' : '✕ '}{status.message}
+            {status.type === 'success' ? '✓ ' : '✕ '}{status.message}
           </p>
         ) : null}
         
-        {isVercel && (
-          <div className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3">
-            <p className="font-semibold mb-1">⚠️ Vercel Deployment Notice</p>
-            <p className="mb-2">Vercel&apos;s serverless environment doesn&apos;t persist filesystem changes. To save changes permanently:</p>
-            <ol className="list-decimal list-inside space-y-1 mb-2">
-              <li>Go to your Vercel project dashboard</li>
-              <li>Click <strong>Storage</strong> tab</li>
-              <li>Create <strong>Vercel KV</strong> (Redis database)</li>
-              <li>Redeploy your app</li>
-            </ol>
-            <p className="text-xs">Without Vercel KV, changes will be lost. Local development works fine with file storage.</p>
-          </div>
-        )}
-        
         <div className="flex items-center justify-between gap-4">
-          <p className="text-xs text-mist">
-            {isVercel ? 'Changes require Vercel KV setup to persist.' : 'All changes are saved to data/links.json on the server.'}
-          </p>
-          <ShinyButton colorScheme="gold" onClick={handleSave} disabled={saving || (isVercel && !status?.message.includes('KV'))}>
+          <p className="text-xs text-mist">Changes are saved instantly and persist across deployments.</p>
+          <ShinyButton colorScheme="gold" onClick={handleSave} disabled={saving}>
             {saving ? 'Saving…' : 'Save Changes'}
           </ShinyButton>
         </div>

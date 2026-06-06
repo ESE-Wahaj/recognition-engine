@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 }
 
 export default async function FeaturesPage() {
-  const links = readLinks()
+  const links = await readLinks()
 
   const deliverables = [
     {

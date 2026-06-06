@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ResourcesPage() {
-  const links = readLinks()
+  const links = await readLinks()
 
   const resources = [
     {
