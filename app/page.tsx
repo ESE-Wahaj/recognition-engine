@@ -7,6 +7,8 @@ import { StepAccordion } from '@/components/StepAccordion'
 import { ChecklistGrid } from '@/components/ChecklistGrid'
 import { ContactForm } from '@/components/ContactForm'
 import { ShinyButton } from '@/components/ui/shiny-button'
+import { Footer } from '@/components/Footer'
+import { SiteDock } from '@/components/SiteDock'
 import { readLinks } from '@/lib/links'
 
 export const metadata: Metadata = {
@@ -739,6 +741,8 @@ export default async function HomePage() {
           </div>
         </section>
       </div>
+      <Footer />
+      <SiteDock />
     </>
   )
 }
