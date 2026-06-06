@@ -17,38 +17,50 @@ interface ResourceCardProps extends React.HTMLAttributes<HTMLDivElement> {
 const accentConfig = {
   gold: {
     topBar: 'bg-gradient-to-r from-[#C9952A] via-[#E8B84B] to-[#C9952A]',
-    border: 'border-[#C9952A]/25',
+    border: 'border-[#C9952A]/30',
     glow: 'shadow-[0_0_45px_-10px_rgba(201,149,42,0.35)]',
     glowHover: 'hover:shadow-[0_0_65px_-8px_rgba(201,149,42,0.55)]',
-    bgAccent: 'from-[#C9952A]/[0.07] via-[#C9952A]/[0.03]',
+    bg: [
+      'radial-gradient(ellipse 75% 55% at 0% 0%, rgba(201,149,42,0.28) 0%, transparent 62%)',
+      'radial-gradient(ellipse 45% 45% at 100% 100%, rgba(232,184,75,0.10) 0%, transparent 55%)',
+      'linear-gradient(145deg, #1A1205 0%, #100F0D 45%, #0B0B12 100%)',
+    ].join(', '),
     badge: 'bg-[#C9952A]/15 text-[#E8B84B] border-[#C9952A]/30',
     check: '#C9952A',
-    checkBg: 'rgba(201,149,42,0.12)',
-    featureHover: 'hover:bg-[#C9952A]/[0.07] hover:border-[#C9952A]/20',
+    checkBg: 'rgba(201,149,42,0.14)',
+    featureHover: 'hover:bg-[#C9952A]/[0.08] hover:border-[#C9952A]/25',
     button: 'gold' as const,
   },
   teal: {
     topBar: 'bg-gradient-to-r from-[#1A6B6B] via-[#2d9d9d] to-[#1A6B6B]',
-    border: 'border-[#1A6B6B]/25',
+    border: 'border-[#1A6B6B]/30',
     glow: 'shadow-[0_0_45px_-10px_rgba(26,107,107,0.35)]',
     glowHover: 'hover:shadow-[0_0_65px_-8px_rgba(26,107,107,0.55)]',
-    bgAccent: 'from-[#1A6B6B]/[0.07] via-[#1A6B6B]/[0.03]',
+    bg: [
+      'radial-gradient(ellipse 75% 55% at 0% 0%, rgba(26,107,107,0.30) 0%, transparent 62%)',
+      'radial-gradient(ellipse 45% 45% at 100% 100%, rgba(45,157,157,0.10) 0%, transparent 55%)',
+      'linear-gradient(145deg, #071414 0%, #0B1010 45%, #0B0B12 100%)',
+    ].join(', '),
     badge: 'bg-[#1A6B6B]/15 text-[#52bfbf] border-[#1A6B6B]/30',
     check: '#2d9d9d',
-    checkBg: 'rgba(26,107,107,0.12)',
-    featureHover: 'hover:bg-[#1A6B6B]/[0.07] hover:border-[#1A6B6B]/20',
+    checkBg: 'rgba(26,107,107,0.14)',
+    featureHover: 'hover:bg-[#1A6B6B]/[0.08] hover:border-[#1A6B6B]/25',
     button: 'teal' as const,
   },
   rose: {
     topBar: 'bg-gradient-to-r from-[#B84040] via-[#e8597b] to-[#B84040]',
-    border: 'border-[#B84040]/25',
+    border: 'border-[#B84040]/30',
     glow: 'shadow-[0_0_45px_-10px_rgba(184,64,64,0.35)]',
     glowHover: 'hover:shadow-[0_0_65px_-8px_rgba(184,64,64,0.55)]',
-    bgAccent: 'from-[#B84040]/[0.07] via-[#B84040]/[0.03]',
+    bg: [
+      'radial-gradient(ellipse 75% 55% at 0% 0%, rgba(184,64,64,0.28) 0%, transparent 62%)',
+      'radial-gradient(ellipse 45% 45% at 100% 100%, rgba(232,89,123,0.10) 0%, transparent 55%)',
+      'linear-gradient(145deg, #160808 0%, #100C0C 45%, #0B0B12 100%)',
+    ].join(', '),
     badge: 'bg-[#B84040]/15 text-[#f08fa3] border-[#B84040]/30',
     check: '#e8597b',
-    checkBg: 'rgba(184,64,64,0.12)',
-    featureHover: 'hover:bg-[#B84040]/[0.07] hover:border-[#B84040]/20',
+    checkBg: 'rgba(184,64,64,0.14)',
+    featureHover: 'hover:bg-[#B84040]/[0.08] hover:border-[#B84040]/25',
     button: 'rose' as const,
   },
 }
@@ -107,17 +119,8 @@ export function ResourceCard({
       {/* Accent top strip */}
       <div className={cn('h-[2px] w-full', cfg.topBar)} />
 
-      {/* Dark base + accent gradient bleed */}
-      <div className="absolute inset-0 bg-[#0B0B12]" />
-      <div className={cn('absolute inset-0 bg-gradient-to-br to-transparent', cfg.bgAccent)} />
-      {/* Noise texture layer */}
-      <div
-        className="absolute inset-0 opacity-[0.025]"
-        style={{
-          backgroundImage:
-            'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'200\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'200\' height=\'200\' filter=\'url(%23n)\' opacity=\'1\'/%3E%3C/svg%3E")',
-        }}
-      />
+      {/* Gradient background */}
+      <div className="absolute inset-0" style={{ background: cfg.bg }} />
 
       {/* Content */}
       <div className="relative z-10">
