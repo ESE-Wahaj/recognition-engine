@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 const faqs = [
   {
     q: 'How many agents can the tracker support?',
-    a: 'Out of the box, the Google Sheet supports up to 25 agents. You can extend it by adding rows — the formulas use named ranges and will scale with minimal adjustments.',
+    a: 'Out of the box, the Google Sheet supports up to 100 agents. You can extend it by adding rows — the formulas use named ranges and will scale with minimal adjustments.',
   },
   {
     q: "Can I change the KPI weights to match my team's priorities?",
@@ -38,7 +38,7 @@ const faqs = [
   },
   {
     q: 'Can I use this with multiple teams?',
-    a: "Yes. Create a separate copy of the Google Sheet for each team. The Canva 'Team of the Month' template is designed for managers who want to celebrate across multiple teams.",
+    a: "Yes. Create a separate copy of the Google Sheet for each team. The Canva 'Team of the Period' template is designed for managers who want to celebrate across multiple teams.",
   },
   {
     q: 'Does this work with any CRM?',
@@ -57,7 +57,7 @@ export default async function HomePage() {
     {
       number: 'DELIVERABLE 01',
       title: 'Performance Dashboard',
-      description: 'Google Sheets — 5 tabs, 218 live formulas',
+      description: 'Google Sheets — 5 tabs, 299 live formulas. Weekly or monthly. Scales with your team.',
       accent: 'gold' as const,
       buttonLabel: 'Open in Google Sheets',
       href: links.sheets.url,
@@ -65,9 +65,9 @@ export default async function HomePage() {
         'Auto-ranking leaderboard by weighted score',
         'Most Improved agent auto-detected',
         'RAG status: Green / Amber / Red per agent',
-        'Leadership-ready monthly scorecard tab',
+        'Leadership-ready performance scorecard tab',
         'Customisable KPI weights in Settings',
-        'Supports up to 25 agents out of the box',
+        'Scales from small teams to large — supports up to 100 agents',
       ],
     },
     {
@@ -78,28 +78,28 @@ export default async function HomePage() {
       buttonLabel: 'Open Canva Kit',
       href: links.canva.url,
       features: [
-        'Best Performer of the Month — flagship announcement',
-        'Top 3 Leaderboard — for meetings and screens',
-        'Most Improved Agent — celebrates growth',
-        'Monthly Team Scorecard — one-pager for leadership',
-        'Team of the Month — for multi-team environments',
+        'Best Performer of the Period — flagship announcement each reporting cycle',
+        'Top 3 Leaderboard — for meetings, Slack, or office screens',
+        'Most Improved Agent — celebrates growth, not just peak performance',
+        'Team Performance Scorecard — one-pager for leadership updates and QBRs',
+        'Team of the Period — for multi-team environments',
         'Annual Champion — the highest year-end honour',
       ],
     },
     {
       number: 'DELIVERABLE 03',
       title: 'Setup Guide & Reference Manual',
-      description: 'PDF — 6 pages, printable, step-by-step',
+      description: 'PDF — 6 pages. Exactly where to find your data in each CRM. No guessing.',
       accent: 'rose' as const,
       buttonLabel: 'Open PDF Guide',
       href: links.pdf.url,
       features: [
-        '5-step monthly setup process',
-        'CRM export guides for Zendesk, Freshdesk, HubSpot',
+        'Step-by-step for non-technical managers — no analyst needed',
+        'CRM-specific guides for Zendesk, Freshdesk, HubSpot, Salesforce & Intercom',
         'KPI definitions and weighting rationale',
-        'Team rollout script — word for word',
+        'Word-for-word rollout script — what to say to your team on day one',
         'Troubleshooting for 6 common issues',
-        'Printable monthly checklist',
+        'Printable end-of-cycle checklist',
       ],
     },
   ]
@@ -113,11 +113,11 @@ export default async function HomePage() {
         <div className="space-y-3">
           <p className="text-sm text-ink-soft leading-relaxed">
             Open the <strong>⚙️ Settings</strong> tab in Google Sheets and update the following at the
-            start of each month:
+            start of each reporting cycle:
           </p>
           <ul className="space-y-1.5">
             {[
-              'Reporting Month — e.g. "May 2025"',
+              'Reporting Period — e.g. "May 2025" or "Week of 12 May"',
               'Team Name & Manager Name — shown on all output tabs and Canva cards',
               'KPI Weights — must total 100%. Leave at default for your first cycle.',
               'Performance Thresholds — Green ≥ 80%, Amber 60–79%, Red < 60% by default',
@@ -129,8 +129,8 @@ export default async function HomePage() {
             ))}
           </ul>
           <div className="bg-amber-50 border-l-4 border-gold px-4 py-3 rounded-r-lg text-sm text-gold-dark mt-3">
-            💡 Don&apos;t change KPI weights until you&apos;ve run at least one full month. See how the scores
-            land first.
+            💡 Don&apos;t change KPI weights until you&apos;ve completed at least one full cycle. See how the
+            scores land first.
           </div>
         </div>
       ),
@@ -142,7 +142,9 @@ export default async function HomePage() {
       body: (
         <div className="space-y-3">
           <p className="text-sm text-ink-soft leading-relaxed">
-            Export or note these 5 metrics per agent. You only need one month of data to start.
+            Export or note these 5 metrics per agent from your CRM — works with Zendesk, Freshdesk,
+            HubSpot, Salesforce, and Intercom. You need one reporting period of data — weekly or monthly,
+            your call.
           </p>
           <div className="overflow-x-auto">
             <table className="w-full text-sm border-collapse">
@@ -156,11 +158,11 @@ export default async function HomePage() {
               </thead>
               <tbody>
                 {[
-                  ['CSAT Score', '35%', 'Reports → Customer Satisfaction', '87 (not 87%)'],
-                  ['Tickets Resolved', '20%', 'Reports → Tickets Closed / Volume', '148'],
-                  ['First Contact Resolution', '20%', 'FCR Rate or Resolution Rate report', '82 (not 82%)'],
-                  ['Avg Handle Time', '15%', 'AHT — convert seconds to minutes', '6.5 minutes'],
-                  ['Attendance Rate', '10%', 'HR system or shift scheduler', '96 (not 96%)'],
+                  ['CSAT Score', '35%', 'Reports → Customer Satisfaction', 'Number: 87'],
+                  ['Tickets Resolved', '20%', 'Reports → Tickets Closed / Volume', 'Count: 148'],
+                  ['First Contact Resolution', '20%', 'FCR Rate or Resolution Rate report', 'Number: 82'],
+                  ['Avg Handle Time', '15%', 'AHT — convert seconds to minutes', 'Minutes: 6.5'],
+                  ['Attendance Rate', '10%', 'HR system or shift scheduler', 'Number: 96'],
                 ].map(([kpi, weight, where, enter]) => (
                   <tr key={kpi} className="border-b border-border-base even:bg-surface">
                     <td className="p-2.5 font-medium text-ink">{kpi}</td>
@@ -173,7 +175,7 @@ export default async function HomePage() {
             </table>
           </div>
           <div className="bg-amber-50 border-l-4 border-gold px-4 py-3 rounded-r-lg text-sm text-gold-dark">
-            💡 Also pull last month&apos;s CSAT and Tickets per agent — needed for the Most Improved tracker.
+            💡 Also pull last period&apos;s CSAT and Tickets per agent — needed for the Most Improved tracker.
           </div>
         </div>
       ),
@@ -189,7 +191,7 @@ export default async function HomePage() {
               'Go to 📋 Data Input',
               'Enter agent names in Column B',
               'Paste KPI values into the yellow cells (Columns C–G)',
-              "Enter last month's data in the light blue cells (Columns H–I)",
+              "Enter last period's data in the light blue cells (Columns H–I)",
               'The dark blue Weighted Score column calculates automatically — never edit it',
             ].map((item) => (
               <li key={item} className="flex items-start gap-2 text-sm text-ink-soft">
@@ -199,8 +201,8 @@ export default async function HomePage() {
             ))}
           </ul>
           <div className="bg-amber-50 border-l-4 border-gold px-4 py-3 rounded-r-lg text-sm text-gold-dark">
-            💡 If an agent was on leave all month, leave their row blank. The formulas handle empty rows
-            without errors.
+            💡 If an agent was away the full period, leave their row blank. The formulas handle empty
+            rows without errors.
           </div>
         </div>
       ),
@@ -216,8 +218,8 @@ export default async function HomePage() {
               'Go to 🏆 Leaderboard — rankings are already sorted highest to lowest',
               'Top 3 agents automatically receive 🥇 🥈 🥉 medals',
               'Check Most Improved highlight at the bottom of the leaderboard tab',
-              'Go to 📋 Monthly Scorecard for the leadership summary — this is your QBR slide',
-              'Check the RAG distribution: how many agents are Green / Amber / Red this month?',
+              'Go to 📋 Performance Scorecard for the leadership summary — this is your QBR slide',
+              'Check the RAG distribution: how many agents are Green / Amber / Red this cycle?',
             ].map((item) => (
               <li key={item} className="flex items-start gap-2 text-sm text-ink-soft">
                 <span className="text-gold text-xs mt-1">✦</span>
@@ -240,11 +242,11 @@ export default async function HomePage() {
         <div className="space-y-3">
           <ul className="space-y-1.5">
             {[
-              'Open the Canva Template Kit — select the relevant card',
-              "Update the winner's name, their standout stat, and the reporting month",
-              'Download as PNG (for Slack/WhatsApp/Teams) or PDF (for printing)',
-              'Post the announcement — tag the winner if your platform supports it',
-              'Share the Monthly Scorecard slide with leadership separately',
+              'Open the Canva Template Kit and choose your card — Best Performer, Most Improved, or Top 3',
+              "Add the winner's name and their standout stat. Takes two minutes.",
+              'Download as PNG for Slack, WhatsApp, or Teams — or PDF if you\'re printing it',
+              'Post it. Tag them if you can. Let the team react — that moment is the whole point.',
+              'Send the Performance Scorecard to leadership. Let them see the work your team is doing.',
             ].map((item) => (
               <li key={item} className="flex items-start gap-2 text-sm text-ink-soft">
                 <span className="text-gold text-xs mt-1">✦</span>
@@ -253,8 +255,8 @@ export default async function HomePage() {
             ))}
           </ul>
           <div className="bg-amber-50 border-l-4 border-gold px-4 py-3 rounded-r-lg text-sm text-gold-dark">
-            💡 Announce within 48 hours of month-end. Recognition loses its impact when delayed. Friday
-            afternoons have the highest team engagement.
+            💡 Announce within 48 hours of your cycle closing. Recognition loses its impact when delayed.
+            Friday afternoons have the highest team engagement.
           </div>
         </div>
       ),
@@ -265,7 +267,7 @@ export default async function HomePage() {
     {
       title: 'Setup',
       items: [
-        'Reporting month updated in Settings',
+        'Setup Guide open for reference (first cycle only)',
         'Team name & manager name confirmed',
         'KPI weights reviewed (total = 100%)',
       ],
@@ -275,7 +277,7 @@ export default async function HomePage() {
       items: [
         'All agent names in Column B',
         'All 5 KPIs in yellow cells',
-        'Previous month data in blue cells',
+        'Previous period data in blue cells',
         'No errors in Weighted Score column',
       ],
     },
@@ -284,7 +286,7 @@ export default async function HomePage() {
       items: [
         'Top 3 verified against CRM',
         'Most Improved agent confirmed',
-        'Scorecard shared with leadership',
+        'Performance Scorecard shared with leadership',
       ],
     },
     {
@@ -292,7 +294,7 @@ export default async function HomePage() {
       items: [
         'Best Performer card updated & posted',
         'Most Improved card updated & posted',
-        'Announced within 48 hrs of month-end',
+        'Announced within 48 hrs of cycle end',
         '1:1 coaching booked for anyone in Red',
       ],
     },
@@ -319,7 +321,7 @@ export default async function HomePage() {
           <div className="shimmer-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-7 animate-fade-up border border-transparent">
             <span className="text-[9px]">✦</span>
             <span className="font-mono text-[11px] tracking-widest text-yellow-300">
-              PRODUCT HUB — EXCLUSIVE ACCESS
+              BUILT BY A CX MANAGER — FOR CX MANAGERS
             </span>
           </div>
 
@@ -337,7 +339,7 @@ export default async function HomePage() {
           </h1>
 
           <p className="text-white/55 font-light text-lg mb-6 animate-fade-up">
-            CX Team Performance &amp; Recognition Dashboard
+            What took weeks to build from scratch — ready for your team this reporting cycle.
           </p>
 
           <div
@@ -346,12 +348,17 @@ export default async function HomePage() {
           />
 
           <div className="bg-white/6 border border-white/10 rounded-xl p-6 text-left mb-10">
-            <p className="font-mono text-[10px] tracking-[0.12em] text-yellow-300 mb-2">Greetings</p>
-            <p className="text-sm text-white/70 leading-relaxed">
-              Welcome — and congratulations on taking this step. Inside this hub you&apos;ll find everything
-              you need to run a complete monthly recognition cycle for your CX team.{' '}
-              <strong className="text-white font-medium">Great work deserves to be seen.</strong> This system
-              makes sure it is.
+            <p className="font-mono text-[10px] tracking-[0.12em] text-yellow-300 mb-2">A NOTE FROM THE CREATOR</p>
+            <p className="text-sm text-white/70 leading-relaxed text-justify">
+              Every reporting cycle, I&apos;d open the same dashboard, update the numbers, and send a
+              performance report to leadership. It looked effortless — but nobody saw the weeks we spent
+              building the formulas, figuring out the weightage, and troubleshooting errors ourselves just
+              to get there. Not every CX manager has that kind of time. Some are still doing it manually.
+              Some are just staring at raw CRM numbers with no real story to tell.{' '}
+              <strong className="text-white font-medium">
+                I built this so you don&apos;t have to start from zero.
+              </strong>{' '}
+              The hard part is already done — you just show up, paste your numbers, and run your team.
             </p>
           </div>
 
@@ -374,9 +381,9 @@ export default async function HomePage() {
       >
         <div className="max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
           {[
-            { value: '218', label: 'Live Formulas' },
+            { value: '299', label: 'Live Formulas' },
             { value: '6', label: 'Canva Templates' },
-            { value: '25', label: 'Agents Supported' },
+            { value: '100', label: 'Agents Supported' },
             { value: '5', label: 'Monthly Steps' },
           ].map(({ value, label }) => (
             <div key={label}>
@@ -423,22 +430,22 @@ export default async function HomePage() {
       <div className="w-full px-6 py-14 bg-gradient-to-b from-white to-gray-50">
         <AnimatedFeatureSpotlight
           preheaderIcon={<span>✦</span>}
-          preheaderText="THE GOLDEN RULE OF THIS SYSTEM"
+          preheaderText="THE GOLDEN RULE"
           heading={
             <>
               <span
                 className="text-transparent bg-clip-text"
                 style={{ backgroundImage: 'linear-gradient(135deg, #C9952A 0%, #E8B84B 50%, #C9952A 100%)' }}
               >
-                Public Recognition.
+                Celebrate publicly.
               </span>{' '}
               <span
                 className="text-transparent bg-clip-text"
                 style={{ backgroundImage: 'linear-gradient(135deg, #c41e3a 0%, #e8597b 100%)' }}
               >
-                Private Coaching.
+                Coach privately.
               </span>{' '}
-              Always.
+              Every single time.
             </>
           }
           description="Share wins publicly to celebrate and motivate. Keep challenges private to coach with care. This balance builds trust, drives performance, and creates a culture where everyone feels seen."
@@ -576,7 +583,7 @@ export default async function HomePage() {
         style={{ backgroundImage: 'linear-gradient(135deg, #C9952A 0%, #E8B84B 50%, #C9952A 100%)' }}
         aria-label="Quick start steps"
       >
-        <span className="text-sm font-bold text-ink">⚡ First 10 minutes:</span>
+        <span className="text-sm font-bold text-ink">⚡ Your first leaderboard in 10 minutes:</span>
         <div className="flex flex-wrap gap-1.5 items-center justify-center">
           {[
             'Open Google Sheet',

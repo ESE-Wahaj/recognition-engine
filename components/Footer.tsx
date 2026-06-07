@@ -13,7 +13,7 @@ export function Footer() {
         </div>
         <p className="text-sm text-white/40 mb-5">CX Team Performance & Recognition Dashboard</p>
         <p className="font-mono text-xs text-white/25">
-          Built for CX managers who believe great teams deserve to be seen.
+          Recognition is not a nice-to-have. In a high-pressure CX environment, it is what keeps your team standing.
         </p>
       </div>
     </footer>

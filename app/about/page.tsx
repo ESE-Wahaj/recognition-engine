@@ -46,16 +46,16 @@ export default function AboutPage() {
       <div className="w-full px-6 py-14 bg-gradient-to-b from-white to-gray-50">
         <AnimatedFeatureSpotlight
           preheaderIcon={<span>✦</span>}
-          preheaderText="THE GOLDEN RULE OF THIS SYSTEM"
+          preheaderText="THE GOLDEN RULE"
           heading={
             <>
               <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #C9952A 0%, #E8B84B 50%, #C9952A 100%)' }}>
-                Public Recognition.
+                Celebrate publicly.
               </span>{' '}
               <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #c41e3a 0%, #e8597b 100%)' }}>
-                Private Coaching.
+                Coach privately.
               </span>{' '}
-              Always.
+              Every single time.
             </>
           }
           description="Share wins publicly to celebrate and motivate. Keep challenges private to coach with care. This balance builds trust, drives performance, and creates a culture where everyone feels seen."
